@@ -1,1 +1,1 @@
-docker run --name web-page -v /home/nginx:/usr/share/nginx/html:ro -d -p 8080:80 nginx
+docker run --name web-page -v /home/nginx/:/usr/share/nginx/html:ro -d -p 8080:80 nginx
