@@ -1,0 +1,5 @@
+wsl --install
+wsl.exe -l -v
+wsl.exe --set-version (distro name) 2
+wsl.exe --set-default-version 2
+wsl --set-default <distro name>
