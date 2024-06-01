@@ -1,0 +1,12 @@
+move DNS
+stop DNS
+copy folder '%SystemRoot%\System32\DNS' from old server to new
+Regedit.exe and export
+HKEY_LOCAL_MACHINE\System\CurrentControlSet\Services\DNS\Zones
+HKEY_LOCAL_MACHINE\Software\Microsoft\Windows NT\CurrentVersion\DNS Server\Zones
+On new server
+import exported files
+start DNS
+in console 'ipconfig /registerdns' for register A and PTR
+register SRV 'netdiag /fix'
+check all configuration
