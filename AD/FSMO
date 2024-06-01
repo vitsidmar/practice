@@ -1,2 +1,29 @@
-Check
+Schema master
+Domain naming master
+PDC emulator
+Infrastructure Master
+RID Master
+
+Check in console
 netdom query fsmo
+Check in Powershel
+Get-ADDomainController -Filter * | Select-Object Name, Domain, Forest, OperationMasterRoles |Where-Object {$_.OperationMasterRoles}
+--or--
+Get-ADDomain | Select-Object InfrastructureMaster, RIDMaster, PDCEmulator
+Get-ADForest | Select-Object DomainNamingMaster, SchemaMaster
+
+mmc 
+
+ntdsutil.exe
+
+PowerShell
+Move-ADDirectoryServerOperationMasterRole -Identity dc02 -OperationMasterRole PDCEmulator, RIDMaster
+--or--
+PDCEmulator	0
+RIDMaster	1
+InfrastructureMaster	2
+SchemaMaster	3
+DomainNamingMaster	4
+Move-ADDirectoryServerOperationMasterRole -Identity dc03 -OperationMasterRole 0,1,2,3,4
+
+https://winitpro.ru/index.php/2012/03/06/peredacha-rolej-fsmo/
