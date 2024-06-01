@@ -10,3 +10,5 @@ start DNS
 in console 'ipconfig /registerdns' for register A and PTR
 register SRV 'netdiag /fix'
 check all configuration
+
+https://learn.microsoft.com/ru-ru/troubleshoot/windows-server/networking/move-zone-files-dns-server
