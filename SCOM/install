@@ -6,7 +6,9 @@ IIS Prerequisites
 Add-WindowsFeature NET-WCF-HTTP-Activation45,Web-Static-Content,Web-Default-Doc,Web-Dir-Browsing,Web-Http-Errors,Web-Http-Logging,Web-Request-Monitor,Web-Filtering,Web-Stat-Compression,Web-Mgmt-Console,Web-Metabase,Web-Asp-Net,Web-Windows-Auth -Restart
 SQL Server 2022
 https://www.microsoft.com/de-de/sql-server/sql-server-downloads
+Install instance features Database Engine Services and Full-Text and Semantic Extractions for Search
 Colation must be SQL_Latin1_General_CP1_CI_AS
+Add curent user
 SQL Server 2022Cumulative Update
 https://www.microsoft.com/en-us/download/details.aspx?id=105013
 SQL Server 2022Reporting Services
