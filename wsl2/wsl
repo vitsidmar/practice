@@ -3,3 +3,17 @@ wsl.exe -l -v
 wsl.exe --set-version (distro name) 2
 wsl.exe --set-default-version 2
 wsl --set-default <distro name>
+
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform
+
+Invoke-WebRequest -Uri https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi -OutFile "$($env:userprofile)\Downloads\wsl_update_x64.msi" -UseBasicParsing
+Invoke-Item "$($env:userprofile)\Downloads\wsl_update_x64.msi"
+rm "$($env:userprofile)\Downloads\wsl_update_x64.msi"
+--or--
+https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi
+
+Invoke-WebRequest https://aka.ms/wslubuntu2204 -OutFile ubuntu-2204.appx –UseBasicParsing
+Add-AppxPackage .\ubuntu-2204.appx
+
+https://winitpro.ru/index.php/2020/07/13/zapusk-linux-v-windows-wsl-2/
