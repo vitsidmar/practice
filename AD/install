@@ -1,5 +1,5 @@
 Install VMware Tools
-Static IP
+configure Static IP
 Change computer name
 reboot
 install rolles Active Directory Domainendienste, DNS, DHCP
@@ -8,8 +8,10 @@ reboot
 configure DNS 
 create reverse zone
 Weiterleitungen add DNS servers 8.8.8.8
-put replication in Zonenubertragungen
+activate replication in Zonenubertragungen
 Configure DHCP
+
+DHCP Failoverbereiche replizieren
 create User AD Benutzer und Computer(Mitglied von: Domanen Admins, Organisation-Admins, Schema-Admins)
 Configure Site Active Directory Standorte und Dienste
 
