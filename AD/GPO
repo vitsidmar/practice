@@ -4,4 +4,8 @@ Benutzerkonfiguration->Administrative vorlage->Desktop->Desktop (Active Desktop 
 Energieverwaltung
 Computerkinfiguration->Administrative vorläge->System->Energieverwaltung (Aktiven Energiesparplan auswählen)
 AppLocker
+Computer Configuration/Policies/Windows Settings/Security Settings/Application Identity (Automatic)
+Computer Configuration/Policies/Windows Settings/Security Settings/Application Control Policies/AppLocker
+Executable rules -> Create Default Rules
+Packaged application -> Create Default Rules
 https://kagarlickij.com/nastrojka-applocker/
