@@ -12,9 +12,20 @@ Get-ADDomainController -Filter * | Select-Object Name, Domain, Forest, Operation
 Get-ADDomain | Select-Object InfrastructureMaster, RIDMaster, PDCEmulator
 Get-ADForest | Select-Object DomainNamingMaster, SchemaMaster
 
+Transfer FSMO roles
 mmc 
+for 0,1,2
+Active Directory Users and Computers -> Change Domain Controller
+Active Directory Users and Computers -> Operations Master
+for 3
+console 'regsvr32 schmmgmt.dll'
+MMC File -> Add/Remove snap-in add Active Directory Schema -> Operations Master
+for 4
+Active Directory Domains and Trusts -> Operations Master
 
 ntdsutil.exe
+ntdsutil -> roles -> connections -> connect to server <servername> -> q
+transfer schema master (naming master, rid master, pdc, infrastructure master)
 
 PowerShell
 Move-ADDirectoryServerOperationMasterRole -Identity dc02 -OperationMasterRole PDCEmulator, RIDMaster
