@@ -1,0 +1,3 @@
+netsh dhcp server export c:\dhcpdatabase.dat all
+netsh dhcp server import c:\dhcpdatabase.dat all
+netsh dhcp show server
