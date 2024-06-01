@@ -1,1 +1,13 @@
+https://www.prajwaldesai.com/scom-2022-install-guide/
 
+System Center Operations Manager 2022
+https://www.microsoft.com/en-us/evalcenter/evaluate-system-center-2022
+IIS Prerequisites
+Add-WindowsFeature NET-WCF-HTTP-Activation45,Web-Static-Content,Web-Default-Doc,Web-Dir-Browsing,Web-Http-Errors,Web-Http-Logging,Web-Request-Monitor,Web-Filtering,Web-Stat-Compression,Web-Mgmt-Console,Web-Metabase,Web-Asp-Net,Web-Windows-Auth -Restart
+SQL Server 2022
+https://www.microsoft.com/de-de/sql-server/sql-server-downloads
+Colation must be SQL_Latin1_General_CP1_CI_AS
+SQL Server 2022Cumulative Update
+https://www.microsoft.com/en-us/download/details.aspx?id=105013
+SQL Server 2022Reporting Services
+https://www.microsoft.com/en-us/download/details.aspx?id=104502
