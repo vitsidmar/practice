@@ -1,3 +1,10 @@
+5723/TCP
+135/TCP
+137/UDP
+138/UDP
+139/TCP
+445/TCP
+49152–65535 TCP
 COM+-Netzwerkzugriff (DCOM-ln)
 Remote-Ereignisprotokollverwaltung (NP eingehend)
 Remote-Ereignisprotokollverwaltung (RPC)
