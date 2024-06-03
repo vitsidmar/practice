@@ -12,3 +12,5 @@ Remote-Ereignisprotokollverwaltung (RPC-EPMAP)
 
 GPO
 Computerconfiguration->Richtlinien->Windows-Einstelungen->Sicherheitseinstellungen->Systemdienste->Windows Defender Firewall (Automatisch)
+Computerconfiguration->Richtlinien->Administrative Vorlagen->Netzwerk->Netzwerkverbindungen->Windows Defender Firewall->Domainenprofil->Alle Netzwerkverbindungen schutzen (Aktiviert)
+Computerconfiguration->Richtlinien->Windows-Einstelungen->Sicherheitseinstellungen->Windows Defender Firewall->Windows Defender Firewall
