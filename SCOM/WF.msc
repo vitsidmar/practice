@@ -9,3 +9,6 @@ COM+-Netzwerkzugriff (DCOM-ln)
 Remote-Ereignisprotokollverwaltung (NP eingehend)
 Remote-Ereignisprotokollverwaltung (RPC)
 Remote-Ereignisprotokollverwaltung (RPC-EPMAP)
+
+GPO
+Computerconfiguration->Richtlinien->Windows-Einstelungen->Sicherheitseinstellungen->Systemdienste->Windows Defender Firewall (Automatisch)
