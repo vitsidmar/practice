@@ -8,7 +8,7 @@ Check in console
 netdom query fsmo
 Check in Powershel
 Get-ADDomainController -Filter * | Select-Object Name, Domain, Forest, OperationMasterRoles |Where-Object {$_.OperationMasterRoles}
---or--
+--or-- Powershell
 Get-ADDomain | Select-Object InfrastructureMaster, RIDMaster, PDCEmulator
 Get-ADForest | Select-Object DomainNamingMaster, SchemaMaster
 
