@@ -1,4 +1,4 @@
-move DNS
+Migrate DNS
 stop DNS
 copy folder '%SystemRoot%\System32\DNS' from old server to new
 Regedit.exe and export
