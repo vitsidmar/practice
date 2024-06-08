@@ -1,5 +1,5 @@
 cd /root
-wget https://github.com/vitsidmar/practice/blob/c828e96cf749fcfc43bf8599e8143290b8fe9f65/vmware/vCert
+curl -L https://github.com/vitsidmar/practice/raw/main/vmware/vCert -o vCert
 chmod +x vCert
 ./vCert
 mostly use options 1, 6, and 14.
