@@ -1,0 +1,7 @@
+reboot->e->rw init=/bin/bash
+passwd root
+pam_tally2 --user root
+pam_tally2 --user root --reset
+pam_tally2 --user root
+umount /
+reboot -f
