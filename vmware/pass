@@ -1,4 +1,4 @@
-reboot->e->rw init=/bin/bash
+reboot -> e -> rw init=/bin/bash -> F10
 passwd root
 pam_tally2 --user root
 pam_tally2 --user root --reset
