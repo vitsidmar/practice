@@ -1,0 +1,63 @@
+Configuring SNMPv3 on Synology NAS
+
+In order to allow the Zabbix Server to monitor your NAS, we need to enable SNMPv3 on it.
+
+After logging in into your NAS, navigate to Control Panel >> Terminal & SNMP and select the tab SNMP. Make sure SNMPv3 is enabled as follows::
+
+Enable SNMP service
+SNMPv1, SNMPv2c service: unchecked
+SNMPv3 service: checked
+Username: zabbix
+Protocol: SHA
+Password: Pick one password
+Enable SNMP privacy: checked
+Protocol: AES
+Password: Pick one password
+SNMP Device Information
+Device name: Synology hostname
+Device location: Device location or leave empty
+Contact: Contact information or leave empty
+Click on Apply and you are done.
+
+Configuring Zabbix Server through Web UI
+
+The template we are going to use doesn’t come installed in Zabbix Server by default, so we are going to import it first. Visit the community template page and navigate to Storage_Devices >> Synology >> template_synology_diskstation_snmpv3 >> 6.0 and click on
+template_synology_diskstation_snmpv3.yaml file, followed a click on Raw button. Save the file locally.
+
+Go to Configuration >> Templates and click on Import. Click on Choose file in the configuration dialog, select the YAML file previously saved and click on Import. Another dialog will be displayed with the actual content being imported. Click on Import .
+
+Although we don’t need to install a Zabbix Agent on the Synology, we still need to create a Host on Zabbix Server to specify the NAS address, etc
+
+Go to Configuration >> Templates and click on Create Host button. When the configuration dialog open, the Host tab should be the default one. Fill in the following fields and leave the rest as-is:
+
+Host
+Host name: Type the Synology hostname
+Templates: Synology DiskStation SNMPv3
+Host Groups: Agentless or whatever describes your Agent
+Interfaces:
+Add a new interface
+Type: SNMP
+IP Address: Type the server IP to be ping’ed
+DNS Name: Type the server FQDN to be ping’ed
+Connect to: Select IP or DNS
+Port: 10050
+Description: Do your thing here
+Monitored by Proxy: (no proxy)
+Macros
+Click on Add
+Macro: {$SNMP_AUTHPASS}
+Value: The “Password” created in the previous section
+Description: be creative or leave empty
+Click on Add
+Macro: {$SNMP_PRIVPASS}
+Value: The SNMP Privacy Password created in the previous section
+Description: do your thing
+Click on Add
+Macro: {$SNMP_USERNAME}
+Value: zabbix (or whatever “Username” was created in the previous section)
+
+https://geekistheway.com/2023/01/01/monitoring-synology-nas-through-snmp-using-zabbix-server/
+Description: leave empty or not
+Finish the host creation by clicking Update.
+
+That is it, let’s try it. Go to Monitoring >> Latest data. In the filter section, type the name of your Synology NAS server in the Hosts box and finally hit Apply. A list of items should be displayed for it, such as Total free memory, etc
