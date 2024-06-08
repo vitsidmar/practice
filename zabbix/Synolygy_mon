@@ -60,4 +60,5 @@ https://geekistheway.com/2023/01/01/monitoring-synology-nas-through-snmp-using-z
 Description: leave empty or not
 Finish the host creation by clicking Update.
 
-That is it, let’s try it. Go to Monitoring >> Latest data. In the filter section, type the name of your Synology NAS server in the Hosts box and finally hit Apply. A list of items should be displayed for it, such as Total free memory, etc
+https://geekistheway.com/2023/01/01/monitoring-synology-nas-through-snmp-using-zabbix-server/
+https://github.com/zabbix/community-templates/tree/main/Storage_Devices/Synology/template_synology_diskstation_snmpv3/6.0
