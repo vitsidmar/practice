@@ -2,4 +2,6 @@ cd /root
 curl -L https://github.com/vitsidmar/practice/raw/main/vmware/vCert -o vCert
 chmod +x vCert
 ./vCert
-mostly use options 1, 6, and 14.
+1 Check current certificates status
+4 -> 2 -> 1 Update SSL Trust Anchors
+Replace all certificates with VMCA-signed certificates
