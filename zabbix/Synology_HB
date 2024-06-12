@@ -1,0 +1,3 @@
+Import template template_synology_hyperbackup.yaml, assign to Synology Host, set the macros {$SYNO.REST.USER} {$SYNO.REST.PASSWORD}, this user has to be in Synology administrators group and allowed access to DSM Application.
+
+https://github.com/lestoilfante/zabbix-integrations/blob/master/Synology/README.md
