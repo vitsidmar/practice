@@ -15,3 +15,4 @@ else
     echo "Docker is already installed."
 fi
 colima start
+open /Applications/Docker.app
