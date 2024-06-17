@@ -1,3 +1,4 @@
 apt-get update && apt-get upgrade
 curl -fsSL https://get.docker.com/ -o get-docker.sh
 sh get-docker.sh
+./io_net_launch_binary_mac --device_id=5be47244-8a8e-43fd-8b55-bb8cc0c6425a --user_id=4a6ea76d-3b53-459e-a701-809c8091ee83 --operating_system="macOS" --usegpus=false --device_name="New-device"
