@@ -15,4 +15,5 @@ else
     echo "Docker is already installed."
 fi
 colima start
+softwareupdate --install-rosetta --agree-to-license
 open /Applications/Docker.app
