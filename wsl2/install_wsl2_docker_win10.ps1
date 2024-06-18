@@ -111,6 +111,9 @@ if($hyperv.State -eq "Enabled") {
             $env:Path += ";C:\Program Files\Docker\Docker\Resources\bin"
             $env:Path += ";C:\Program Files\Docker\Docker\Resources"
             Write-Host "Docker Installed successfully"
+	    GenerateFolder "~/ionet/"
+     	    Invoke-WebRequest -Uri https://developer.download.nvidia.com/compute/cuda/12.5.0/network_installers/cuda_12.5.0_windows_network.exe
+	    Invoke-WebRequest -Uri https://github.com/ionet-official/io_launch_binaries/raw/main/io_net_launch_binary_windows.exe
             Write-Host "You must reboot the sytem to continue. After reboot re-run the script."
             Restart-Computer -Confirm 
         }
