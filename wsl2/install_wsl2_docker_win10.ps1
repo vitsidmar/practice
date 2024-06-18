@@ -140,7 +140,13 @@ if($hyperv.State -eq "Enabled") {
     Write-Host "Hyper-V is enabled now reboot the system and re-run the script to continue the installation."
 }
 
-
+$users = Get-ChildItem c:\users
+foreach($user in $users){
+    if($user.name -ne "defaultuser0" -and $user.name -ne "Public"){
+        $DOCKER_USER = $user.name
+		net localgroup docker-users "$DOCKER_USER" /ADD
+    }
+}
 
 <#
 REFERENCES USED FOR WRITING THIS SCRIPT
