@@ -96,7 +96,13 @@ if($hyperv.State -eq "Enabled") {
             Write-Host "Downloading the Docker exe"
             Invoke-WebRequest -Uri https://desktop.docker.com/win/stable/Docker%20Desktop%20Installer.exe -OutFile DockerInstaller.exe -UseBasicParsing
             Write-Host "Download Completed"
-            
+	    $users = Get-ChildItem c:\users
+	    foreach($user in $users){
+	        if($user.name -ne "defaultuser0" -and $user.name -ne "Public"){
+	            $DOCKER_USER = $user.name
+	    		net localgroup docker-users "$DOCKER_USER" /ADD
+	        }
+	    }
             start-process .\DockerInstaller.exe "install --quiet" -Wait -NoNewWindow
             cd "C:\Program Files\Docker\Docker\"
             Write-Host "Installing Docker..."
@@ -138,14 +144,6 @@ if($hyperv.State -eq "Enabled") {
     Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
     Start-Sleep 30
     Write-Host "Hyper-V is enabled now reboot the system and re-run the script to continue the installation."
-}
-
-$users = Get-ChildItem c:\users
-foreach($user in $users){
-    if($user.name -ne "defaultuser0" -and $user.name -ne "Public"){
-        $DOCKER_USER = $user.name
-		net localgroup docker-users "$DOCKER_USER" /ADD
-    }
 }
 
 <#
