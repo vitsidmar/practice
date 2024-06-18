@@ -65,7 +65,7 @@ if($hyperv.State -eq "Enabled") {
 
         Write-Host "WSL is enabled. Setting it to WSL2"
         wsl --set-default-version 2
-        wsl.exe --install Ubuntu-20.04
+        #wsl.exe --install Ubuntu-20.04
 
         # disable distro install 
         # no need to install distro as docker runs on its own distro
