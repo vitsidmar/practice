@@ -1,0 +1,174 @@
+Windows Aufgaben
+o Implementierung und Verwaltung einer Remote Desktop Services
+(RDS) Umgebung:
+▪ Installation der Remote Desktop Services Rolle.
+▪ Konfiguration des Remote Desktop Lizenzservers.
+▪ Erstellen und Zuweisen von RDS-Sitzungssammlungen für
+verschiedene Benutzergruppen.
+Netzwerkkonfiguration und Sicherheit
+2. Firewall Konfiguration:
+o Konfiguration der integrierten Firewall auf der Windows Server
+VM:
+▪ Einrichten von eingehenden und ausgehenden Regeln für
+bestimmte Dienste und Ports.
+▪ Blockieren von nicht benötigten Diensten und Protokollen.
+o Einrichtung von Regeln zur Beschränkung des Zugriffs auf
+bestimmte Ports und Dienste:
+▪ Erstellen spezifischer Regeln für RDP, HTTP/HTTPS und DNS-
+Dienste.
+▪ Testen der Regeln zur Sicherstellung, dass sie wie gewünscht
+funktionieren.
+o Testen der Firewall-Regeln und Sicherstellung, dass sie korrekt
+funktionieren:
+▪ Durchführung von Penetrationstests und Portscans.
+▪ Dokumentation der Ergebnisse und Anpassung der Regeln bei
+Bedarf.
+System- und Sicherheitsmanagement
+3. Automatisierte Backups:
+o Einrichtung eines geplanten Tasks auf der Windows-VM, der
+wichtige Systemdateien täglich sichert:
+▪ Verwenden der Windows-Sicherung oder eines Drittanbieter-
+Tools.
+▪ Konfiguration des geplanten Tasks zur täglichen Ausführung.
+▪ Sicherstellen, dass die Backups auf einem Netzwerk-
+Speichergerät gespeichert werden.
+4. Patch Management:
+o Entwickeln und Dokumentieren eines Plans zur Verwaltung und
+Implementierung von Betriebssystem- und Software-Updates auf
+der Windows-VM:
+▪ Erstellen eines detaillierten Plans für regelmäßige Patch-Zyklen.
+▪ Definieren von Testphasen vor der Implementierung in der
+Produktionsumgebung.
+o Durchführung der Updates und Erstellung eines Berichts über die
+durchgeführten Maßnahmen:
+▪ Installieren der neuesten Patches und Updates.
+▪ Überprüfen der Systemintegrität nach den Updates.
+▪ Dokumentation aller durchgeführten Updates und etwaiger
+Probleme.
+Monitoring und Logging
+5. Log Management:
+o Installation und Konfiguration von ELK Stack (Elasticsearch,
+Logstash, Kibana) auf einer neuen Linux-VM:
+▪ Installation von Elasticsearch, Logstash und Kibana.
+▪ Konfiguration der Komponenten zur Zusammenarbeit.
+o Einrichtung der Windows-VM zur Protokollweiterleitung an den
+ELK-Server:
+▪ Konfiguration von Winlogbeat auf der Windows-VM zur
+Weiterleitung von Ereignisprotokollen.
+o Erstellen von Visualisierungen in Kibana zur Überwachung der
+Systemereignisse:
+▪ Erstellen von Dashboards zur Visualisierung von wichtigen
+Logdaten.
+▪ Analysieren und Filtern von Protokolldaten zur Fehlerbehebung.
+Skripting und Automatisierung
+6. PowerShell Skripting:
+o Schreiben eines PowerShell-Skripts, das Benutzerkonten aus einer
+CSV-Datei importiert und in Active Directory erstellt:
+▪ Erstellen einer CSV-Datei mit Benutzerinformationen.
+▪ Schreiben eines PowerShell-Skripts, das die CSV-Datei einliest
+und die Benutzer in AD erstellt.
+▪ Testen des Skripts und Überprüfung der neuen Benutzerkonten.
+o Schreiben eines PowerShell-Skripts, das regelmäßig die Event Logs
+auf dem Windows Server überprüft und Berichte per E-Mail
+versendet:
+▪ Schreiben eines Skripts zur Abfrage spezifischer
+Ereignisprotokolle.
+▪ Konfiguration des Skripts zur Erstellung und Versendung von
+Berichten.
+▪ Planen des Skripts zur regelmäßigen Ausführung mittels Task
+Scheduler.
+Fortgeschrittene Aufgaben
+7. Hochverfügbarkeit und Lastverteilung:
+o Einrichtung und Konfiguration eines Hochverfügbarkeitsclusters
+für die Webserver (Windows und Linux) mit Load Balancing:
+▪ Installation und Konfiguration von HAProxy oder NGINX als
+Load Balancer.
+▪ Einrichten der Webserver im Cluster.
+▪ Testen der Lastverteilung und Failover-Funktionalität.
+o Testen und Dokumentieren der Failover-Szenarien:
+▪ Simulieren von Ausfällen und Überprüfen der Failover-Prozesse.
+▪ Dokumentation der Ergebnisse und etwaiger Optimierungen.
+8. Active Directory Federation Services (ADFS):
+o Installation und Konfiguration von ADFS auf einem Windows
+Server:
+▪ Installation der ADFS-Rolle.
+▪ Konfiguration der ADFS-Dienste und Vertrauensstellungen.
+o Integration einer Webanwendung mit ADFS zur Single Sign-On
+(SSO) Authentifizierung:
+▪ Einrichten von Relying Party Trusts für die Webanwendung.
+▪ Konfiguration der Webanwendung zur Nutzung von ADFS für
+SSO.
+▪ Testen der SSO-Funktionalität und Dokumentation der
+Konfiguration.
+Troubleshooting und Dokumentation
+9. Fehlerbehebung:
+o Simulieren und Beheben von mindestens drei gängigen Netzwerk-
+oder Systemproblemen auf der Windows-VM:
+▪ Netzwerkausfall und Wiederherstellung.
+▪ Fehlerhafte DNS-Auflösung und Behebung.
+▪ Probleme mit Benutzerzugriffsrechten und Lösung.
+o Dokumentation der aufgetretenen Probleme und der
+durchgeführten Lösungen:
+▪ Erstellen detaillierter Berichte für jedes Problem.
+▪ Beschreibung der Ursachen, Lösungsschritte und präventiven
+Maßnahmen.
+10. Dokumentation:
+o Erstellung einer umfassenden Dokumentation aller durchgeführten
+Installationen, Konfigurationen, Skripte und Lösungen:
+▪ Detaillierte Beschreibung jeder Aufgabe und deren
+Durchführung.
+▪ Einschließen von Screenshots und Code-Beispielen.
+o Erstellung eines abschließenden Berichts, der die Erfahrungen und
+Herausforderungen der Aufgaben beschreibt:
+▪ Zusammenfassung der gesamten Projektarbeit.
+▪ Reflexion über Herausforderungen, erlernte Lektionen und
+Verbesserungsvorschläge.
+Kapitel 2: Aufgaben für Linux
+Virtuelle Maschinen Erstellung und Konfiguration
+1. Linux Server VM Erstellen:
+o Erstellen und Konfigurieren einer Ubuntu Server 20.04 VM:
+▪ Installation von Ubuntu Server 20.04.
+▪ Zuweisung von mindestens 2 GB RAM und 1 vCPU.
+▪ Einrichten eines statischen IP-Adressenschemas.
+o Installation und Konfiguration von Apache, MySQL und PHP
+(LAMP-Stack):
+▪ Installieren und Konfigurieren von Apache.
+▪ Installieren von MySQL und Erstellen einer Datenbank.
+▪ Installieren von PHP und Konfiguration von Apache zur
+Unterstützung von PHP.
+o Sicherstellen, dass der Webserver aus dem lokalen Netzwerk
+zugänglich ist:
+▪ Konfiguration der Firewall-Regeln zur Erlaubnis von HTTP- und
+HTTPS-Verkehr.
+▪ Testen der Erreichbarkeit des Webservers von einem Client-PC.
+o Erstellen eines einfachen HTML-Formulars, das Daten in die
+MySQL-Datenbank speichert:
+▪ Entwickeln eines HTML-Formulars zur Dateneingabe.
+▪ Schreiben eines PHP-Skripts zur Verarbeitung und Speicherung
+der Daten in MySQL.
+▪ Testen der Formularfunktionalität und Datenbankintegration.
+Netzwerkkonfiguration und Sicherheit
+2. VPN Konfiguration:
+o Installation und Konfiguration eines OpenVPN-Servers auf der
+Linux-VM:
+▪ Installation von OpenVPN und Easy-RSA.
+▪ Erstellen der PKI- und CA-Infrastruktur.
+▪ Generieren und Verteilen von Client-Konfigurationsdateien.
+o Erstellen und Konfigurieren von VPN-Benutzerkonten:
+▪ Einrichten von mindestens drei VPN-Benutzerkonten.
+▪ Testen der VPN-Verbindungen von verschiedenen Clients.
+o Sicherstellen, dass ein Client-PC sich über VPN mit dem internen
+Netzwerk verbinden kann:
+▪ Überprüfen der Netzwerkverbindungen und
+Ressourcenverfügbarkeit nach der VPN-Verbindung.
+▪ Beheben von Verbindungsproblemen und Optimieren der VPN-
+Performance.
+System- und Sicherheitsmanagement
+3. Automatisierte Backups:
+o Einrichtung eines Skripts auf der Linux-VM, das tägliche Backups
+der MySQL-Datenbank erstellt und auf einem externen Speicher
+sichert:
+▪ Schreiben eines Bash-Skripts zur Dump-Erstellung der MySQL-
+Datenbank.
+▪ Planen des Skripts mittels Cronjobs.
+▪ Sicherstellen
