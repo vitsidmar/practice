@@ -1,4 +1,4 @@
-Instaliere rolle Remotedesktopdienste, Rollendienste (Remotedesktoplizenzierung, Remotedesktop-Sitzungshost)
+Instaliere rolle Remotedesktopdienste, Rollendienste (Remotedesktoplizenzierung, Remotedesktop-Sitzungshost, Remotedesktopgateway)
 GPO RDP
 Computerconfiguration -> Richtlinien -> Administrative Vorlagen -> Netzwerk -> Netzwerkverbindung -> Windows Defender Firewall -> Domanenprofil -> Eingehende Remotedesktopausnahmen zulassen (Aktiviert und IP-addressen zulassen *)
 Computerconfiguration -> Richtlinien -> Windows-Einstellungen -> Sicherheitseinstellungen -> Lokale Richtinien -> Zuweisen von Benutzerrechten -> Anmelden über Remotedesktopdienste zulassen (Administratoren und Remotedesktopbenutzer)
