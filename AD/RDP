@@ -1,1 +1,5 @@
-Instaliere rolle Remotedesktopdienste
+Instaliere rolle Remotedesktopdienste, Rollendienste (Remotedesktoplizenzierung, Remotedesktop-Sitzungshost)
+GPO RDP
+Computerconfiguration -> Richtlinien -> Administrative Vorlagen -> Netzwerk -> Netzwerkverbindung -> Windows Defender Firewall -> Domanenprofil -> Eingehende Remotedesktopausnahmen zulassen
+Aktiviert
+IP-addressen zulassen *
