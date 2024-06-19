@@ -1,6 +1,8 @@
 Instaliere rolle Remotedesktopdienste, Rollendienste (Remotedesktoplizenzierung, Remotedesktop-Sitzungshost)
 GPO RDP
 Computerconfiguration -> Richtlinien -> Administrative Vorlagen -> Netzwerk -> Netzwerkverbindung -> Windows Defender Firewall -> Domanenprofil -> Eingehende Remotedesktopausnahmen zulassen (Aktiviert und IP-addressen zulassen *)
-Computerconfiguration -> Richtlinien -> Administrative Vorlagen -> Windows-Komponenten -> Remotedektopdienste -> Remotedektopsitzung-Host -> Verbindungen -> Remoteverbindungen fur Benutzer mithilfe der Remotedesktopdienste zulassen (Aktiviert)
 Computerconfiguration -> Richtlinien -> Windows-Einstellungen -> Sicherheitseinstellungen -> Lokale Richtinien -> Zuweisen von Benutzerrechten -> Anmelden über Remotedesktopdienste zulassen (Administratoren und Remotedesktopbenutzer)
-
+Computerconfiguration -> Richtlinien -> Administrative Vorlagen -> Windows-Komponenten -> Remotedektopdienste -> Remotedektopsitzung-Host -> Verbindungen -> Remoteverbindungen fur Benutzer mithilfe der Remotedesktopdienste zulassen (Aktiviert)
+Auf RDP server gpedit.msc
+Computerconfiguration -> Administrative Vorlagen -> Windows-Komponenten -> Remotedektopdienste -> Remotedektopsitzung-Host -> Lizenzierung -> Angegebene Remotedesktop-Lizenzserver verwenden *aktiviert IP RDP server)
+Computerconfiguration -> Administrative Vorlagen -> Windows-Komponenten -> Remotedektopdienste -> Remotedektopsitzung-Host -> Lizenzierung -> Remotedesktop-Lizenzierungsmodus festlegen (Aktiviert Pro Gerät)
