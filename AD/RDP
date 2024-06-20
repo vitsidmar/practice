@@ -3,6 +3,8 @@ Auf RDP server gpedit.msc
 Computerconfiguration -> Administrative Vorlagen -> Windows-Komponenten -> Remotedektopdienste -> Remotedektopsitzung-Host -> Lizenzierung -> Angegebene Remotedesktop-Lizenzserver verwenden *aktiviert IP RDP server)
 Computerconfiguration -> Administrative Vorlagen -> Windows-Komponenten -> Remotedektopdienste -> Remotedektopsitzung-Host -> Lizenzierung -> Remotedesktop-Lizenzierungsmodus festlegen (Aktiviert Pro Gerät)
 Offen Remotedesktoplizenzierungs-Manager -> Server aktivieren
+4965437
+
 GPO RDP
 Computerconfiguration -> Richtlinien -> Administrative Vorlagen -> Netzwerk -> Netzwerkverbindung -> Windows Defender Firewall -> Domanenprofil -> Eingehende Remotedesktopausnahmen zulassen (Aktiviert und IP-addressen zulassen *)
 Computerconfiguration -> Richtlinien -> Windows-Einstellungen -> Sicherheitseinstellungen -> Lokale Richtinien -> Zuweisen von Benutzerrechten -> Anmelden über Remotedesktopdienste zulassen (Administratoren und Remotedesktopbenutzer)
