@@ -63,14 +63,20 @@ input {
 }
 vim output.conf
 output {
+    if "winsrv" in [tags] {
         elasticsearch {
-            hosts    => "https://localhost:9200"
-            index    => "websrv-%{+YYYY.MM}"
-	    user => "elastic"
-	    password => "ktNBdiTxO3hKqASVvHyu"
-	    cacert => "/etc/logstash/certs/http_ca.crt"
+            hosts     => "https://localhost:9200"
+            index    => "winsrv-%{+YYYY.MM.dd}"
         }
+    }
+    else {
+        elasticsearch {
+            hosts     => "https://localhost:9200"
+            index    => "unknown_messages"
+        }
+    }
 }
+
 cp -R /etc/elasticsearch/certs /etc/logstash
 chown -R root:logstash /etc/logstash/certs
 vim filter.conf
@@ -92,8 +98,29 @@ filter {
 # https://grokdebug.herokuapp.com/
 
 
-
+### INSTALL Winlogbeat
+# Download MSI and install
 https://www.elastic.co/downloads/beats/winlogbeat
+# create file winlogbeat.yml
+winlogbeat.event_logs:
+  - name: Application
+    ignore_older: 72h
+  - name: Security
+  - name: System
+
+tags: ["winsrv"]
+
+output.logstash:
+  hosts: ["10.20.1.56:5044"]
+
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: C:/ProgramData/Elastic/Beats/winlogbeat
+  name: winlogbeat.log
+  keepfiles: 7
+
+
 systemctl start logstash.service
 
 
