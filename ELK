@@ -7,7 +7,13 @@ systemctl daemon-reload
 systemctl enable elasticsearch.service
 systemctl start elasticsearch.service
 systemctl status elasticsearch.service
-# curl -k --user elastic:'ZuDDodRjV0iE3++Iann6' https://127.0.0.1:9200
+# curl -k --user elastic:'*4=uJmHoNNv_z+Z+h6_0' https://127.0.0.1:9200
+# Reset the password of the elastic built-in superuser with
+# /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
+# Generate an enrollment token for Kibana instances with
+# /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
+# Generate an enrollment token for Elasticsearch nodes with
+# /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node
 
 ### CONFIGURE Elasticsearch
 vim /etc/elasticsearch/elasticsearch.yml
@@ -15,6 +21,8 @@ path.data: /var/lib/elasticsearch # директория для хранения
 network.host: 127.0.0.1 # слушаем только локальный интерфейс
 http.host: 127.0.0.1 # слушаем только локальный интерфейс
 discovery.seed_hosts: ["127.0.0.1", "[::1]"]
+sed -i "s|#network.host: 192.168.0.1|network.host: 127.0.0.1|" /etc/elasticsearch/elasticsearch.yml
+sed -i "s|http.host: 0.0.0.0|http.host: 127.0.0.1|" /etc/elasticsearch/elasticsearch.yml
 systemctl restart elasticsearch.service
 # netstat -tulnp | grep 9200
 
@@ -29,16 +37,16 @@ systemctl status kibana.service
 # netstat -tulnp | grep 5601
 
 ### CONFIGURE kibana
-vi /etc/kibana/kibana.yml
-server.host: 172.16.240.240
-server.publicBaseUrl: "http://172.16.240.240:5601/"
+#new pass
 /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana_system
+vi /etc/kibana/kibana.yml
+server.publicBaseUrl: "http://172.16.240.240:5601/"
 elasticsearch.username: "kibana_system"
-elasticsearch.password: "mtbg5rIwh*E*eWuBCECG"
-cp -R /etc/elasticsearch/certs /etc/kibana
-chown -R root:kibana /etc/kibana/certs
+elasticsearch.password: "fcO3WzHQ7Paz-lNK=Gvd"
 elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/certs/http_ca.crt" ]
 elasticsearch.hosts: ["https://localhost:9200"]
+cp -R /etc/elasticsearch/certs /etc/kibana
+chown -R root:kibana /etc/kibana/certs
 systemctl restart kibana.service
 http://172.16.240.240:5601
 http://192.168.222.192:8001/
@@ -82,6 +90,10 @@ filter {
   }
 }
 # https://grokdebug.herokuapp.com/
+
+
+
+https://www.elastic.co/downloads/beats/winlogbeat
 systemctl start logstash.service
 
 
