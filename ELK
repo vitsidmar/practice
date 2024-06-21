@@ -1,0 +1,90 @@
+### INSTALL Elasticsearch
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+apt install apt-transport-https
+echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-8.x.list
+apt update && apt install elasticsearch
+systemctl daemon-reload
+systemctl enable elasticsearch.service
+systemctl start elasticsearch.service
+systemctl status elasticsearch.service
+# curl -k --user elastic:'ZuDDodRjV0iE3++Iann6' https://127.0.0.1:9200
+
+### CONFIGURE Elasticsearch
+vim /etc/elasticsearch/elasticsearch.yml
+path.data: /var/lib/elasticsearch # директория для хранения данных
+network.host: 127.0.0.1 # слушаем только локальный интерфейс
+http.host: 127.0.0.1 # слушаем только локальный интерфейс
+discovery.seed_hosts: ["127.0.0.1", "[::1]"]
+systemctl restart elasticsearch.service
+# netstat -tulnp | grep 9200
+
+### INSTALL Kibana
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-8.x.list
+apt update && apt install kibana
+systemctl daemon-reload
+systemctl enable kibana.service
+systemctl start kibana.service
+systemctl status kibana.service
+# netstat -tulnp | grep 5601
+
+### CONFIGURE kibana
+vi /etc/kibana/kibana.yml
+server.host: 172.16.240.240
+server.publicBaseUrl: "http://172.16.240.240:5601/"
+/usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana_system
+elasticsearch.username: "kibana_system"
+elasticsearch.password: "mtbg5rIwh*E*eWuBCECG"
+cp -R /etc/elasticsearch/certs /etc/kibana
+chown -R root:kibana /etc/kibana/certs
+elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/certs/http_ca.crt" ]
+elasticsearch.hosts: ["https://localhost:9200"]
+systemctl restart kibana.service
+http://172.16.240.240:5601
+http://192.168.222.192:8001/
+
+### INSTALL Logstash
+apt install logstash
+systemctl enable logstash.service
+cd /etc/logstash/conf.d
+vim input.conf
+input {
+  beats {
+    port => 5044
+  }
+}
+vim output.conf
+output {
+        elasticsearch {
+            hosts    => "https://localhost:9200"
+            index    => "websrv-%{+YYYY.MM}"
+	    user => "elastic"
+	    password => "ktNBdiTxO3hKqASVvHyu"
+	    cacert => "/etc/logstash/certs/http_ca.crt"
+        }
+}
+cp -R /etc/elasticsearch/certs /etc/logstash
+chown -R root:logstash /etc/logstash/certs
+vim filter.conf
+filter {
+ if [type] == "nginx_access" {
+    grok {
+        match => { "message" => "%{IPORHOST:remote_ip} - %{DATA:user} \[%{HTTPDATE:access_time}\] \"%{WORD:http_method} %{DATA:url} HTTP/%{NUMBER:http_version}\" %{NUMBER:response_code} %{NUMBER:body_sent_bytes} \"%{DATA:referrer}\" \"%{DATA:agent}\"" }
+    }
+  }
+  date {
+        match => [ "timestamp" , "dd/MMM/YYYY:HH:mm:ss Z" ]
+  }
+  geoip {
+         source => "remote_ip"
+         target => "geoip"
+         add_tag => [ "nginx-geoip" ]
+  }
+}
+# https://grokdebug.herokuapp.com/
+systemctl start logstash.service
+
+
+
+
+https://serveradmin.ru/ustanovka-i-nastroyka-elasticsearch-logstash-kibana-elk-stack/
