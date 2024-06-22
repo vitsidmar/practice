@@ -1,0 +1,12 @@
+ssh-keygen -C "$(whoami)@$(uname -n)-$(date -I)"
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@192.168.160.248
+
+vim /etc/ssh/sshd_config
+PermitRootLogin yes
+PasswordAuthentication yes
+#PermitRootLogin without-password
+#PasswordAuthentication no
+
+/etc/init.d/ssh restart
+
+chmod 400 ~/.ssh/id_rsa
