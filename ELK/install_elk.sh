@@ -68,8 +68,9 @@ cat >$logstash_dir/output.conf <<EOF
 output {
     if "winsrv" in [tags] {
         elasticsearch {
-            hosts     => "https://localhost:9200"
-            index    => "winsrv-%{+YYYY.MM.dd}"
+          hosts => ["http://localhost:9200"]
+          index => "%{[@metadata][beat]}-%{[@metadata][version]}"
+          action => "create"
         }
     }
     else {
@@ -80,6 +81,14 @@ output {
     }
 }
 EOF
+
+output {
+  elasticsearch {
+    hosts => ["http://localhost:9200"]
+    index => "%{[@metadata][beat]}-%{[@metadata][version]}" 
+    action => "create"
+  }
+}
 
 cat >$logstash_dir/filter.conf <<EOF
 filter {
