@@ -1,0 +1,24 @@
+### INSTALL Winlogbeat
+# Download MSI and install
+# https://www.elastic.co/downloads/beats/winlogbeat
+# create file winlogbeat.yml
+winlogbeat.event_logs:
+  - name: Application
+    ignore_older: 72h
+  - name: Security
+  - name: System
+
+tags: ["winsrv"]
+
+output.logstash:
+  hosts: ["10.20.1.56:5044"]
+
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: C:/ProgramData/Elastic/Beats/winlogbeat
+  name: winlogbeat.log
+  keepfiles: 7
+
+
+systemctl start logstash.service
