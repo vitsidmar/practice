@@ -1,7 +1,7 @@
 4 Domain naming master
 3 Schema master
 2 Infrastructure Master
-1 RID Master
+1 RID Master (проблеми з учетками)
 0 PDC emulator
 
 Check in console
