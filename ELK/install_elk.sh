@@ -7,25 +7,12 @@ apt update && apt install elasticsearch -y
 systemctl daemon-reload
 systemctl enable elasticsearch.service
 systemctl start elasticsearch.service
-# systemctl status elasticsearch.service
-# curl -k --user elastic:'*4=uJmHoNNv_z+Z+h6_0' https://127.0.0.1:9200
-# Reset the password of the elastic built-in superuser with
-# /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
-# Generate an enrollment token for Kibana instances with
-# /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s kibana
-# Generate an enrollment token for Elasticsearch nodes with
-# /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node
 
 ### CONFIGURE Elasticsearch
-# vim /etc/elasticsearch/elasticsearch.yml
-#  path.data: /var/lib/elasticsearch # директория для хранения данных
-#  network.host: 127.0.0.1 # слушаем только локальный интерфейс
-#  http.host: 127.0.0.1 # слушаем только локальный интерфейс
-#  discovery.seed_hosts: ["127.0.0.1", "[::1]"]
-
-sudo sed -i "s|#network.host: 192.168.0.1|network.host: 127.0.0.1|" /etc/elasticsearch/elasticsearch.yml
-sudo sed -i "s|http.host: 0.0.0.0|http.host: 127.0.0.1|" /etc/elasticsearch/elasticsearch.yml
-sudo sed -i '/#discovery.seed_hosts: \["host1", "host2"\]/a discovery.seed_hosts: ["127.0.0.1", "[::1]"]' /etc/elasticsearch/elasticsearch.yml
+elastic_conf="/etc/elasticsearch/elasticsearch.yml"
+sudo sed -i "s|#network.host: 192.168.0.1|network.host: 127.0.0.1|" $elastic_conf
+sudo sed -i "s|http.host: 0.0.0.0|http.host: 127.0.0.1|" $elastic_conf
+sudo sed -i '/#discovery.seed_hosts: \["host1", "host2"\]/a discovery.seed_hosts: ["127.0.0.1", "[::1]"]' $elastic_conf
 systemctl restart elasticsearch.service
 # netstat -tulnp | grep 9200
 }
@@ -42,10 +29,9 @@ systemctl status kibana.service
 # netstat -tulnp | grep 5601
 
 ### CONFIGURE kibana
-#new pass
-output=$(yes | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana_system)
-new_password=$(echo "$output" | grep "New value:" | awk '{print $3}')
-echo "New password for kibana_system is: $new_password"
+newpass=$(yes | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana_system)
+kibana_password=$(echo "$newpass" | grep "New value:" | awk '{print $3}')
+echo "New password for kibana_system is: $kibana_password"
 ip_address=$(hostname -I | awk '{print $1}')
 kibana_conf="/etc/kibana/kibana.yml"
 sudo sed -i "s|#server.publicBaseUrl: \"\"|server.publicBaseUrl: \"http://$ip_address:5601/\"|" $kibana_conf
