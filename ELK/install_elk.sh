@@ -9,6 +9,7 @@ apt update && apt install elasticsearch -y
 systemctl daemon-reload
 systemctl enable elasticsearch.service
 systemctl start elasticsearch.service
+curl -X GET "localhost:9200"
 
 ### CONFIGURE Elasticsearch
 elastic_conf="/etc/elasticsearch/elasticsearch.yml"
