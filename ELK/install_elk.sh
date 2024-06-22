@@ -82,14 +82,6 @@ output {
 }
 EOF
 
-output {
-  elasticsearch {
-    hosts => ["http://localhost:9200"]
-    index => "%{[@metadata][beat]}-%{[@metadata][version]}" 
-    action => "create"
-  }
-}
-
 cat >$logstash_dir/filter.conf <<EOF
 filter {
 }
