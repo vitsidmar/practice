@@ -1,4 +1,4 @@
-Windows Aufgaben
+  Windows Aufgaben
   o Implementierung und Verwaltung einer Remote Desktop Services (RDS) Umgebung:
     ▪ Installation der Remote Desktop Services Rolle.
     ▪ Konfiguration des Remote Desktop Lizenzservers.
@@ -96,43 +96,33 @@ Virtuelle Maschinen Erstellung und Konfiguration
     ▪ Zuweisung von mindestens 2 GB RAM und 1 vCPU.
     ▪ Einrichten eines statischen IP-Adressenschemas.
   o Installation und Konfiguration von Apache, MySQL und PHP (LAMP-Stack):
-▪ Installieren und Konfigurieren von Apache.
-▪ Installieren von MySQL und Erstellen einer Datenbank.
-▪ Installieren von PHP und Konfiguration von Apache zur
-Unterstützung von PHP.
-o Sicherstellen, dass der Webserver aus dem lokalen Netzwerk
-zugänglich ist:
-▪ Konfiguration der Firewall-Regeln zur Erlaubnis von HTTP- und
-HTTPS-Verkehr.
-▪ Testen der Erreichbarkeit des Webservers von einem Client-PC.
-o Erstellen eines einfachen HTML-Formulars, das Daten in die
-MySQL-Datenbank speichert:
-▪ Entwickeln eines HTML-Formulars zur Dateneingabe.
-▪ Schreiben eines PHP-Skripts zur Verarbeitung und Speicherung
-der Daten in MySQL.
-▪ Testen der Formularfunktionalität und Datenbankintegration.
+    ▪ Installieren und Konfigurieren von Apache.
+    ▪ Installieren von MySQL und Erstellen einer Datenbank.
+    ▪ Installieren von PHP und Konfiguration von Apache zur Unterstützung von PHP.
+  o Sicherstellen, dass der Webserver aus dem lokalen Netzwerk zugänglich ist:
+    ▪ Konfiguration der Firewall-Regeln zur Erlaubnis von HTTP- und HTTPS-Verkehr.
+    ▪ Testen der Erreichbarkeit des Webservers von einem Client-PC.
+  o Erstellen eines einfachen HTML-Formulars, das Daten in die MySQL-Datenbank speichert:
+    ▪ Entwickeln eines HTML-Formulars zur Dateneingabe.
+    ▪ Schreiben eines PHP-Skripts zur Verarbeitung und Speicherung der Daten in MySQL.
+    ▪ Testen der Formularfunktionalität und Datenbankintegration.
+
 Netzwerkkonfiguration und Sicherheit
 2. VPN Konfiguration:
-o Installation und Konfiguration eines OpenVPN-Servers auf der
-Linux-VM:
-▪ Installation von OpenVPN und Easy-RSA.
-▪ Erstellen der PKI- und CA-Infrastruktur.
-▪ Generieren und Verteilen von Client-Konfigurationsdateien.
-o Erstellen und Konfigurieren von VPN-Benutzerkonten:
-▪ Einrichten von mindestens drei VPN-Benutzerkonten.
-▪ Testen der VPN-Verbindungen von verschiedenen Clients.
-o Sicherstellen, dass ein Client-PC sich über VPN mit dem internen
-Netzwerk verbinden kann:
-▪ Überprüfen der Netzwerkverbindungen und
-Ressourcenverfügbarkeit nach der VPN-Verbindung.
-▪ Beheben von Verbindungsproblemen und Optimieren der VPN-
-Performance.
+  o Installation und Konfiguration eines OpenVPN-Servers auf der Linux-VM:
+    ▪ Installation von OpenVPN und Easy-RSA.
+    ▪ Erstellen der PKI- und CA-Infrastruktur.
+    ▪ Generieren und Verteilen von Client-Konfigurationsdateien.
+  o Erstellen und Konfigurieren von VPN-Benutzerkonten:
+    ▪ Einrichten von mindestens drei VPN-Benutzerkonten.
+    ▪ Testen der VPN-Verbindungen von verschiedenen Clients.
+  o Sicherstellen, dass ein Client-PC sich über VPN mit dem internen Netzwerk verbinden kann:
+    ▪ Überprüfen der Netzwerkverbindungen und Ressourcenverfügbarkeit nach der VPN-Verbindung.
+    ▪ Beheben von Verbindungsproblemen und Optimieren der VPN-Performance.
+
 System- und Sicherheitsmanagement
 3. Automatisierte Backups:
-o Einrichtung eines Skripts auf der Linux-VM, das tägliche Backups
-der MySQL-Datenbank erstellt und auf einem externen Speicher
-sichert:
-▪ Schreiben eines Bash-Skripts zur Dump-Erstellung der MySQL-
-Datenbank.
-▪ Planen des Skripts mittels Cronjobs.
-▪ Sicherstellen
+  o Einrichtung eines Skripts auf der Linux-VM, das tägliche Backups der MySQL-Datenbank erstellt und auf einem externen Speicher sichert:
+    ▪ Schreiben eines Bash-Skripts zur Dump-Erstellung der MySQL-Datenbank.
+    ▪ Planen des Skripts mittels Cronjobs.
+    ▪ Sicherstellen
