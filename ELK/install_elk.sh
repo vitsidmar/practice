@@ -28,7 +28,6 @@ apt update && apt install kibana -y
 systemctl daemon-reload
 systemctl enable kibana.service
 systemctl start kibana.service
-systemctl status kibana.service
 
 ### CONFIGURE kibana
 cp -R /etc/elasticsearch/certs /etc/kibana
