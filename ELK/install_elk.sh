@@ -96,7 +96,3 @@ install_Logstash
 echo "$url"
 echo "Login: elastic"
 echo "Password: $elastic_password"
-
-
-
-#https://serveradmin.ru/ustanovka-i-nastroyka-elasticsearch-logstash-kibana-elk-stack/
