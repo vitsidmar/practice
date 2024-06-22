@@ -66,19 +66,11 @@ EOF
 
 cat >$logstash_dir/output.conf <<EOF
 output {
-    if "winsrv" in [tags] {
-        elasticsearch {
-          hosts => ["http://localhost:9200"]
-          index => "%{[@metadata][beat]}-%{[@metadata][version]}"
-          action => "create"
-        }
-    }
-    else {
-        elasticsearch {
-            hosts     => "https://localhost:9200"
-            index    => "unknown_messages"
-        }
-    }
+  elasticsearch {
+    hosts => ["http://localhost:9200"]
+    index => "%{[@metadata][beat]}-%{[@metadata][version]}"
+    action => "create"
+  }
 }
 EOF
 
