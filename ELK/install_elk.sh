@@ -97,6 +97,9 @@ EOF
 }
 # https://grokdebug.herokuapp.com/
 
+install_Elasticsearch
+install_Kibana
+install_Logstash
 
 
 #https://serveradmin.ru/ustanovka-i-nastroyka-elasticsearch-logstash-kibana-elk-stack/
