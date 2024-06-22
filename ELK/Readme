@@ -12,3 +12,7 @@ curl -k --user elastic:'pass' https://127.0.0.1:9200
 ### INSTALL Winlogbeat
 # Download MSI and install
 https://www.elastic.co/downloads/beats/winlogbeat
+Install Winlogbeat
+PowerShell.exe -ExecutionPolicy UnRestricted -File .\install-service-winlogbeat.ps1
+./winlogbeat -c winlogbeat.yml -e
+
