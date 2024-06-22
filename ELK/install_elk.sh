@@ -1,3 +1,5 @@
+#!/bin/bash
+
 ### INSTALL Elasticsearch
 install_Elasticsearch() {
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
