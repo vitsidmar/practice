@@ -1,12 +1,13 @@
 ### INSTALL Elasticsearch
+install_Elasticsearch() {
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
-apt install apt-transport-https
+apt install apt-transport-https net-tools -y
 echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-8.x.list
-apt update && apt install elasticsearch
+apt update && apt install elasticsearch -y
 systemctl daemon-reload
 systemctl enable elasticsearch.service
 systemctl start elasticsearch.service
-systemctl status elasticsearch.service
+# systemctl status elasticsearch.service
 # curl -k --user elastic:'*4=uJmHoNNv_z+Z+h6_0' https://127.0.0.1:9200
 # Reset the password of the elastic built-in superuser with
 # /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
@@ -16,20 +17,24 @@ systemctl status elasticsearch.service
 # /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node
 
 ### CONFIGURE Elasticsearch
-vim /etc/elasticsearch/elasticsearch.yml
-path.data: /var/lib/elasticsearch # директория для хранения данных
-network.host: 127.0.0.1 # слушаем только локальный интерфейс
-http.host: 127.0.0.1 # слушаем только локальный интерфейс
-discovery.seed_hosts: ["127.0.0.1", "[::1]"]
-sed -i "s|#network.host: 192.168.0.1|network.host: 127.0.0.1|" /etc/elasticsearch/elasticsearch.yml
-sed -i "s|http.host: 0.0.0.0|http.host: 127.0.0.1|" /etc/elasticsearch/elasticsearch.yml
+# vim /etc/elasticsearch/elasticsearch.yml
+#  path.data: /var/lib/elasticsearch # директория для хранения данных
+#  network.host: 127.0.0.1 # слушаем только локальный интерфейс
+#  http.host: 127.0.0.1 # слушаем только локальный интерфейс
+#  discovery.seed_hosts: ["127.0.0.1", "[::1]"]
+
+sudo sed -i "s|#network.host: 192.168.0.1|network.host: 127.0.0.1|" /etc/elasticsearch/elasticsearch.yml
+sudo sed -i "s|http.host: 0.0.0.0|http.host: 127.0.0.1|" /etc/elasticsearch/elasticsearch.yml
+sudo sed -i '/#discovery.seed_hosts: \["host1", "host2"\]/a discovery.seed_hosts: ["127.0.0.1", "[::1]"]' /etc/elasticsearch/elasticsearch.yml
 systemctl restart elasticsearch.service
 # netstat -tulnp | grep 9200
+}
 
 ### INSTALL Kibana
+install_Kibana() {
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-8.x.list
-apt update && apt install kibana
+apt update && apt install kibana -y
 systemctl daemon-reload
 systemctl enable kibana.service
 systemctl start kibana.service
@@ -38,30 +43,37 @@ systemctl status kibana.service
 
 ### CONFIGURE kibana
 #new pass
-/usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana_system
-vi /etc/kibana/kibana.yml
-server.publicBaseUrl: "http://172.16.240.240:5601/"
-elasticsearch.username: "kibana_system"
-elasticsearch.password: "fcO3WzHQ7Paz-lNK=Gvd"
-elasticsearch.ssl.certificateAuthorities: [ "/etc/kibana/certs/http_ca.crt" ]
-elasticsearch.hosts: ["https://localhost:9200"]
+output=$(yes | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana_system)
+new_password=$(echo "$output" | grep "New value:" | awk '{print $3}')
+echo "New password for kibana_system is: $new_password"
+ip_address=$(hostname -I | awk '{print $1}')
+kibana_conf="/etc/kibana/kibana.yml"
+sudo sed -i "s|#server.publicBaseUrl: \"\"|server.publicBaseUrl: \"http://$ip_address:5601/\"|" $kibana_conf
+sudo sed -i "s|#elasticsearch.username: \"kibana_system\"|elasticsearch.username: \"kibana_system\"|" $kibana_conf
+sudo sed -i "s|#elasticsearch.password: \"pass\"|elasticsearch.password: \"$kibana_password\"|" $kibana_conf
+sudo sed -i 's|#elasticsearch.ssl.certificateAuthorities: \[ "/path/to/your/CA.pem" \]|elasticsearch.ssl.certificateAuthorities: \[ "/etc/kibana/certs/http_ca.crt" \]|' $kibana_conf
+sudo sed -i 's|#elasticsearch.hosts: \["http://localhost:9200"\]|elasticsearch.hosts: \["http://localhost:9200"\]|' $kibana_conf
 cp -R /etc/elasticsearch/certs /etc/kibana
 chown -R root:kibana /etc/kibana/certs
 systemctl restart kibana.service
-http://172.16.240.240:5601
-http://192.168.222.192:8001/
+}
 
 ### INSTALL Logstash
-apt install logstash
+install_Logstash() {
+apt install logstash -y
 systemctl enable logstash.service
-cd /etc/logstash/conf.d
-vim input.conf
+cp -R /etc/elasticsearch/certs /etc/logstash
+chown -R root:logstash /etc/logstash/certs
+logstash_dir="/etc/logstash/conf.d"
+cat >$logstash_dir/input.conf <<EOF
 input {
   beats {
     port => 5044
   }
 }
-vim output.conf
+EOF
+
+cat >$logstash_dir/output.conf <<EOF
 output {
     if "winsrv" in [tags] {
         elasticsearch {
@@ -76,54 +88,15 @@ output {
         }
     }
 }
+EOF
 
-cp -R /etc/elasticsearch/certs /etc/logstash
-chown -R root:logstash /etc/logstash/certs
-vim filter.conf
+cat >$logstash_dir/filter.conf <<EOF
 filter {
- if [type] == "nginx_access" {
-    grok {
-        match => { "message" => "%{IPORHOST:remote_ip} - %{DATA:user} \[%{HTTPDATE:access_time}\] \"%{WORD:http_method} %{DATA:url} HTTP/%{NUMBER:http_version}\" %{NUMBER:response_code} %{NUMBER:body_sent_bytes} \"%{DATA:referrer}\" \"%{DATA:agent}\"" }
-    }
-  }
-  date {
-        match => [ "timestamp" , "dd/MMM/YYYY:HH:mm:ss Z" ]
-  }
-  geoip {
-         source => "remote_ip"
-         target => "geoip"
-         add_tag => [ "nginx-geoip" ]
-  }
+}
+EOF
 }
 # https://grokdebug.herokuapp.com/
 
 
-### INSTALL Winlogbeat
-# Download MSI and install
-https://www.elastic.co/downloads/beats/winlogbeat
-# create file winlogbeat.yml
-winlogbeat.event_logs:
-  - name: Application
-    ignore_older: 72h
-  - name: Security
-  - name: System
 
-tags: ["winsrv"]
-
-output.logstash:
-  hosts: ["10.20.1.56:5044"]
-
-logging.level: info
-logging.to_files: true
-logging.files:
-  path: C:/ProgramData/Elastic/Beats/winlogbeat
-  name: winlogbeat.log
-  keepfiles: 7
-
-
-systemctl start logstash.service
-
-
-
-
-https://serveradmin.ru/ustanovka-i-nastroyka-elasticsearch-logstash-kibana-elk-stack/
+#https://serveradmin.ru/ustanovka-i-nastroyka-elasticsearch-logstash-kibana-elk-stack/
