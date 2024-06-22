@@ -37,7 +37,7 @@ kibana_password=$(echo "$newpass" | grep "New value:" | awk '{print $3}')
 echo "New password for kibana_system is: $kibana_password"
 ip_address=$(hostname -I | awk '{print $1}')
 kibana_conf="/etc/kibana/kibana.yml"
-sudo sed -i "s|#server.host: \"localhostZZ\"|server.host: \"$ip_address\"|" $kibana_conf
+sudo sed -i "s|#server.host: \"localhost\"|server.host: \"$ip_address\"|" $kibana_conf
 sudo sed -i "s|#server.publicBaseUrl: \"\"|server.publicBaseUrl: \"http://$ip_address:5601/\"|" $kibana_conf
 sudo sed -i "s|#elasticsearch.username: \"kibana_system\"|elasticsearch.username: \"kibana_system\"|" $kibana_conf
 sudo sed -i "s|#elasticsearch.password: \"pass\"|elasticsearch.password: \"$kibana_password\"|" $kibana_conf
