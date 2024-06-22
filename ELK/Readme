@@ -1,5 +1,5 @@
 Install ELK (tested Ubuntu 22.04)
-curl -L https://github.com/virsidmar/raw/main/practice/ELK/install_elk.sh -o install_elk.sh && chmod +x install_elk.sh && ./install_elk.sh
+curl -L https://github.com/vitsidmar/practice/raw/main/ELK/install_elk.sh -o install_elk.sh && chmod +x install_elk.sh && ./install_elk.sh
 
 curl -k --user elastic:'pass' https://127.0.0.1:9200
 # Reset the password of the elastic built-in superuser with
