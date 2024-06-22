@@ -1,7 +1,3 @@
-### INSTALL Winlogbeat
-# Download MSI and install
-# https://www.elastic.co/downloads/beats/winlogbeat
-# create file winlogbeat.yml
 winlogbeat.event_logs:
   - name: Application
     ignore_older: 72h
