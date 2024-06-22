@@ -32,6 +32,8 @@ systemctl status kibana.service
 # netstat -tulnp | grep 5601
 
 ### CONFIGURE kibana
+cp -R /etc/elasticsearch/certs /etc/kibana
+chown -R root:kibana /etc/kibana/certs
 newpass=$(yes | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana_system)
 kibana_password=$(echo "$newpass" | grep "New value:" | awk '{print $3}')
 echo "New password for kibana_system is: $kibana_password"
@@ -44,8 +46,6 @@ sudo sed -i "s|#elasticsearch.username: \"kibana_system\"|elasticsearch.username
 sudo sed -i "s|#elasticsearch.password: \"pass\"|elasticsearch.password: \"$kibana_password\"|" $kibana_conf
 sudo sed -i 's|#elasticsearch.ssl.certificateAuthorities: \[ "/path/to/your/CA.pem" \]|elasticsearch.ssl.certificateAuthorities: \[ "/etc/kibana/certs/http_ca.crt" \]|' $kibana_conf
 sudo sed -i 's|#elasticsearch.hosts: \["http://localhost:9200"\]|elasticsearch.hosts: \["http://localhost:9200"\]|' $kibana_conf
-cp -R /etc/elasticsearch/certs /etc/kibana
-chown -R root:kibana /etc/kibana/certs
 systemctl restart kibana.service
 }
 
