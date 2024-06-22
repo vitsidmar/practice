@@ -36,14 +36,17 @@ chown -R root:kibana /etc/kibana/certs
 kibana_new_pass=$(yes | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u kibana_system)
 kibana_password=$(echo "$kibana_new_pass" | grep "New value:" | awk '{print $3}')
 ip_address=$(hostname -I | awk '{print $1}')
+url="http://$ip_address:5601"
 kibana_conf="/etc/kibana/kibana.yml"
 sudo sed -i "s|#server.port: 5601|#server.port: 5601|" $kibana_conf
 sudo sed -i "s|#server.host: \"localhost\"|server.host: \"$ip_address\"|" $kibana_conf
-sudo sed -i "s|#server.publicBaseUrl: \"\"|server.publicBaseUrl: \"http://$ip_address:5601/\"|" $kibana_conf
+sudo sed -i "s|#server.publicBaseUrl: \"\"|server.publicBaseUrl: \"$url\"|" $kibana_conf
 sudo sed -i "s|#elasticsearch.username: \"kibana_system\"|elasticsearch.username: \"kibana_system\"|" $kibana_conf
 sudo sed -i "s|#elasticsearch.password: \"pass\"|elasticsearch.password: \"$kibana_password\"|" $kibana_conf
 sudo sed -i 's|#elasticsearch.ssl.certificateAuthorities: \[ "/path/to/your/CA.pem" \]|elasticsearch.ssl.certificateAuthorities: \[ "/etc/kibana/certs/http_ca.crt" \]|' $kibana_conf
 sudo sed -i 's|#elasticsearch.hosts: \["http://localhost:9200"\]|elasticsearch.hosts: \["https://localhost:9200"\]|' $kibana_conf
+echo "Login: kibana_system"
+echo "Password: $kibana_password"
 systemctl restart kibana.service
 }
 
@@ -89,11 +92,11 @@ EOF
 install_Elasticsearch
 install_Kibana
 install_Logstash
-echo "Elasticsearch"
+
+echo "$url"
 echo "Login: elastic"
 echo "Password: $elastic_password"
-echo "Kibana"
-echo "Login: kibana_system"
-echo "Password: $kibana_password"
+
+
 
 #https://serveradmin.ru/ustanovka-i-nastroyka-elasticsearch-logstash-kibana-elk-stack/
