@@ -23,6 +23,8 @@ EOF
 systemctl restart elasticsearch.service
 elastic_new_pass=$(yes | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic)
 elastic_password=$(echo "$elastic_new_pass" | grep "New value:" | awk '{print $3}')
+ss -tunlp | grep 9200
+
 }
 
 ### INSTALL Kibana
@@ -52,6 +54,7 @@ sudo sed -i 's|#elasticsearch.hosts: \["http://localhost:9200"\]|elasticsearch.h
 echo "Login: kibana_system"
 echo "Password: $kibana_password"
 systemctl restart kibana.service
+ss -tunlp | grep 5601
 }
 
 ### INSTALL Logstash
