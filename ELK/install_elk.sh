@@ -80,6 +80,7 @@ output {
         }
 }
 EOF
+ss -tunlp | grep 5044
 }
 # https://grokdebug.herokuapp.com/
 
