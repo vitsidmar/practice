@@ -18,8 +18,8 @@ sudo sed -i "s|#network.host: 192.168.0.1|network.host: 127.0.0.1|" $elastic_con
 sudo sed -i "s|http.host: 0.0.0.0|http.host: 127.0.0.1|" $elastic_conf
 #sudo sed -i '/#discovery.seed_hosts: \["host1", "host2"\]/a discovery.seed_hosts: ["127.0.0.1", "[::1]"]' $elastic_conf
 cat > /etc/elasticsearch/jvm.options.d/gc.options <<EOF
-Xms4g
-Xmx4g
+Xms2g
+Xmx2g
 EOF
 systemctl restart elasticsearch.service
 elastic_new_pass=$(yes | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic)
