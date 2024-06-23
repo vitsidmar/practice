@@ -9,6 +9,9 @@ curl -k --user elastic:'pass' https://127.0.0.1:9200
 # Generate an enrollment token for Elasticsearch nodes with
 /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node
 
+testl logstash config
+/usr/share/logstash/bin/logstash --path.settings /etc/logstash -t
+
 ### INSTALL Winlogbeat
 # Download MSI and install
 https://www.elastic.co/downloads/beats/winlogbeat
