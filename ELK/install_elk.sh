@@ -29,7 +29,7 @@ elastic_password=$(echo "$elastic_new_pass" | grep "New value:" | awk '{print $3
 install_Kibana() {
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-8.x.list
-apt update && apt install kibana -y
+apt update && apt install kibana openjdk-8-jre -y
 systemctl daemon-reload
 systemctl enable kibana.service
 systemctl start kibana.service
