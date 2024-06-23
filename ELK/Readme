@@ -11,6 +11,7 @@ curl -k --user elastic:'pass' https://127.0.0.1:9200
 
 testl logstash config
 /usr/share/logstash/bin/logstash --path.settings /etc/logstash -t
+ss -tunlp | grep 5044
 
 ### INSTALL Winlogbeat
 # Download MSI and install
