@@ -28,7 +28,7 @@ curl http://localhost:9200
 install_Kibana() {
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-8.x.list
-apt update && apt install kibana openjdk-8-jre -y
+apt-get update && apt-get install kibana openjdk-8-jre -y
 systemctl daemon-reload
 systemctl enable kibana.service
 systemctl start kibana.service
