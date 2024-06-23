@@ -71,11 +71,13 @@ EOF
 
 cat >$logstash_dir/output.conf <<EOF
 output {
-  elasticsearch {
-    hosts => ["https://localhost:9200"]
-    index => "%{[@metadata][beat]}-%{[@metadata][version]}"
-    action => "create"
-  }
+        elasticsearch {
+            hosts    => "https://localhost:9200"
+            index    => "websrv-%{+YYYY.MM}"
+	    user => "elastic"
+	    password => "$elastic_password"
+	    cacert => "/etc/logstash/certs/http_ca.crt"
+        }
 }
 EOF
 }
