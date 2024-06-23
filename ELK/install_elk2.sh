@@ -4,9 +4,9 @@ apt-get update && apt-get install apt-transport-https elasticsearch kibana openj
 elastic_conf="/etc/elasticsearch/elasticsearch.yml"
 sed -i "s|#node.name: node-1|node.name: elk-node|" $elastic_conf
 sed -i "s|#network.host: 192.168.0.1|network.host: 127.0.0.1|" $elastic_conf
-/etc/elasticsearch/jvm.options.d/gc.options
+cat > /etc/elasticsearch/jvm.options.d/gc.options <<EOF
 Xms4g
 Xmx4g
-
+EOF
 ss -tunlp | grep 9200
 curl http://localhost:9200
