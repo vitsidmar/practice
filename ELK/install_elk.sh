@@ -21,6 +21,7 @@ systemctl restart elasticsearch.service
 elastic_new_pass=$(yes | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic)
 elastic_password=$(echo "$elastic_new_pass" | grep "New value:" | awk '{print $3}')
 ss -tunlp | grep 9200
+curl -X GET "localhost:9200"
 }
 
 ### INSTALL Kibana
