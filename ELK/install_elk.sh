@@ -21,14 +21,13 @@ systemctl restart elasticsearch.service
 elastic_new_pass=$(yes | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic)
 elastic_password=$(echo "$elastic_new_pass" | grep "New value:" | awk '{print $3}')
 ss -tunlp | grep 9200
-curl http://localhost:9200
 }
 
 ### INSTALL Kibana
 install_Kibana() {
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | apt-key add -
 echo "deb https://artifacts.elastic.co/packages/8.x/apt stable main" | tee -a /etc/apt/sources.list.d/elastic-8.x.list
-apt-get update && apt-get install kibana openjdk-8-jre -y
+apt-get update && apt-get install kibana -y
 systemctl daemon-reload
 systemctl enable kibana.service
 systemctl start kibana.service
@@ -79,11 +78,6 @@ output {
 }
 EOF
 
-cat >$logstash_dir/filter.conf <<EOF
-filter {
-}
-EOF
-}
 # https://grokdebug.herokuapp.com/
 
 install_Elasticsearch
