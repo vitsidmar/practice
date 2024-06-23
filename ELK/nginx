@@ -1,0 +1,43 @@
+#!/bin/bash
+
+USER="your_username"
+PASSWORD="your_password"
+IP_ADDRESS="192.168.180.180"
+NGINX_CONF_PATH="/etc/nginx/sites-available/kibana"
+NGINX_SYMLINK_PATH="/etc/nginx/sites-enabled/kibana"
+HTPASSWD_FILE="/etc/nginx/htpasswd"
+
+if ! command -v htpasswd &> /dev/null; then
+    echo "Installing apache2-utils..."
+    sudo apt-get update
+    sudo apt-get install -y apache2-utils
+fi
+
+echo $PASSWORD | sudo htpasswd -ci $HTPASSWD_FILE $USER
+
+sudo tee $NGINX_CONF_PATH > /dev/null <<EOF
+server {
+    listen $IP_ADDRESS:5601;
+    server_name kibana;
+
+    error_log /var/log/nginx/kibana.error.log;
+    access_log /var/log/nginx/kibana.access.log;
+
+    location / {
+        auth_basic "Restricted Access";
+        auth_basic_user_file $HTPASSWD_FILE;
+        rewrite ^/(.*) /$1 break;
+        proxy_ignore_client_abort on;
+        proxy_pass http://localhost:5601;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header Host \$http_host;
+    }
+}
+EOF
+
+sudo ln -sf $NGINX_CONF_PATH $NGINX_SYMLINK_PATH
+
+sudo nginx -t
+
+sudo systemctl restart nginx
