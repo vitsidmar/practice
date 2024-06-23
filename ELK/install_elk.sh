@@ -15,13 +15,13 @@ systemctl start elasticsearch.service
 elastic_conf="/etc/elasticsearch/elasticsearch.yml"
 sed -i "s|#node.name: node-1|node.name: elk-node|" $elastic_conf
 sudo sed -i "s|#network.host: 192.168.0.1|network.host: 127.0.0.1|" $elastic_conf
-sudo sed -i "s|http.host: 0.0.0.0|http.host: 127.0.0.1|" $elastic_conf
-#sudo sed -i '/#discovery.seed_hosts: \["host1", "host2"\]/a discovery.seed_hosts: ["127.0.0.1", "[::1]"]' $elastic_conf
+#sudo sed -i "s|http.host: 0.0.0.0|http.host: 127.0.0.1|" $elastic_conf
+sudo sed -i '/#discovery.seed_hosts: \["host1", "host2"\]/a discovery.seed_hosts: ["127.0.0.1", "[::1]"]' $elastic_conf
 systemctl restart elasticsearch.service
 elastic_new_pass=$(yes | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic)
 elastic_password=$(echo "$elastic_new_pass" | grep "New value:" | awk '{print $3}')
 ss -tunlp | grep 9200
-curl -X GET "localhost:9200"
+curl -k --user elastic:'$elastic_password' https://127.0.0.1:9200
 }
 
 ### INSTALL Kibana
@@ -72,7 +72,7 @@ EOF
 cat >$logstash_dir/output.conf <<EOF
 output {
   elasticsearch {
-    hosts => ["http://localhost:9200"]
+    hosts => ["https://localhost:9200"]
     index => "%{[@metadata][beat]}-%{[@metadata][version]}"
     action => "create"
   }
