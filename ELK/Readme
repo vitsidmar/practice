@@ -39,6 +39,9 @@ http://172.16.240.240:5601
 Login: elastic
 Password: JX1esNPbZf_ia9G1FTqQ
 
+API key Win_Dashboards
+05p_SpAB7ndNIf_RdTqf:onkD3uU1QD22FERvu6yhKw
+
 Jun 24 12:19:11 elk logstash[22821]: [2024-06-24T12:19:11,697][WARN ][logstash.outputs.elasticsearch][main] Attempted to resurrect connection to dead ES instance, but got an error {:url=>"http://elastic:xxxxxx@localhost:9200/", :except>
 Jun 24 12:19:16 elk logstash[22821]: [2024-06-24T12:19:16,706][INFO ][logstash.outputs.elasticsearch][main] Failed to perform request {:message=>"localhost:9200 failed to respond", :exception=>Manticore::ClientProtocolException, :cause>
 J
