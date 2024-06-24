@@ -13,3 +13,7 @@ output {
             cacert => "/etc/logstash/certs/http_ca.crt"
         }
 }
+
+
+
+### https://grokdebug.herokuapp.com/
