@@ -82,7 +82,6 @@ output {
 }
 EOF
 }
-# https://grokdebug.herokuapp.com/
 
 install_Elasticsearch
 install_Kibana
