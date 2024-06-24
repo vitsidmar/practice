@@ -29,7 +29,12 @@ PowerShell.exe -ExecutionPolicy UnRestricted -File .\install-service-winlogbeat.
 Start-Service winlogbeat
 
 # Winlogbeat Dashboards
-.\winlogbeat.exe setup --dashboards
+PS > .\winlogbeat.exe setup -e `
+  -E output.logstash.enabled=false `
+  -E output.elasticsearch.hosts=['localhost:9200'] `
+  -E output.elasticsearch.username=elastic `
+  -E output.elasticsearch.password=JX1esNPbZf_ia9G1FTqQ `
+  -E setup.kibana.host=172.16.240.240:5601
 
 https://logit.io/sources/configure/windows/
 https://serveradmin.ru/ustanovka-i-nastroyka-elasticsearch-logstash-kibana-elk-stack/
