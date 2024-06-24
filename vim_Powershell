@@ -1,0 +1,8 @@
+Install
+https://github.com/vim/vim-win32-installer/releases/download/v9.1.0/gvim_9.1.0_x64_signed.exe
+new-item -path $profile -itemtype file -force
+notepad $profile
+set-alias vim "C:/Program Files (x86)/Vim/vim80/.\vim.exe"
+
+test
+vim C:\Windows\System32\drivers\etc\hosts
