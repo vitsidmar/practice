@@ -1,6 +1,7 @@
 Install ELK (tested Ubuntu 22.04)
 curl -L https://github.com/vitsidmar/practice/raw/main/ELK/install_elk.sh -o install_elk.sh && chmod +x install_elk.sh && ./install_elk.sh
 
+Elasticsearch commands
 curl -k --user elastic:'pass' https://127.0.0.1:9200
 # Reset the password of the elastic built-in superuser with
 /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic
@@ -11,11 +12,9 @@ curl -k --user elastic:'pass' https://127.0.0.1:9200
 
 test logstash config
 /usr/share/logstash/bin/logstash --path.settings /etc/logstash -t
-ss -tunlp | grep 5044
 logstash logs
 journalctl -u logstash.service
 /var/log/logstash
-
 
 ### INSTALL Winlogbeat
 # Download MSI and install
