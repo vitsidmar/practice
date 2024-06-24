@@ -5,9 +5,11 @@ input {
 }
 
 output {
-  elasticsearch {
-    hosts => ["http://localhost:9200"]
-    index => "%{[@metadata][beat]}-%{[@metadata][version]}" 
-    action => "create"
-  }
+        elasticsearch {
+            hosts => "https://localhost:9200"
+            index => "websrv-%{+YYYY.MM}"
+            user => "elastic"
+            password => "JX1esNPbZf_ia9G1FTqQ"
+            cacert => "/etc/logstash/certs/http_ca.crt"
+        }
 }
