@@ -16,11 +16,9 @@ elastic_conf="/etc/elasticsearch/elasticsearch.yml"
 sed -i "s|#node.name: node-1|node.name: elk-node|" $elastic_conf
 sudo sed -i "s|#network.host: 192.168.0.1|network.host: 127.0.0.1|" $elastic_conf
 #sudo sed -i "s|http.host: 0.0.0.0|http.host: 127.0.0.1|" $elastic_conf
-#sudo sed -i '/#discovery.seed_hosts: \["host1", "host2"\]/a discovery.seed_hosts: ["127.0.0.1", "[::1]"]' $elastic_conf
 systemctl restart elasticsearch.service
 elastic_new_pass=$(yes | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic)
 elastic_password=$(echo "$elastic_new_pass" | grep "New value:" | awk '{print $3}')
-ss -tunlp | grep 9200
 curl -k --user elastic:'$elastic_password' https://127.0.0.1:9200
 }
 
@@ -51,7 +49,6 @@ sudo sed -i 's|#elasticsearch.hosts: \["http://localhost:9200"\]|elasticsearch.h
 echo "Login: kibana_system"
 echo "Password: $kibana_password"
 systemctl restart kibana.service
-ss -tunlp | grep 5601
 }
 
 ### INSTALL Logstash
@@ -80,7 +77,6 @@ output {
         }
 }
 EOF
-ss -tunlp | grep 5044
 }
 # https://grokdebug.herokuapp.com/
 
@@ -88,6 +84,9 @@ install_Elasticsearch
 install_Kibana
 install_Logstash
 
+ss -tunlp | grep 9200
+ss -tunlp | grep 5601
+ss -tunlp | grep 5044
 echo "$url"
 echo "Login: elastic"
 echo "Password: $elastic_password"
