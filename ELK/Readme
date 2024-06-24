@@ -32,8 +32,8 @@ Start-Service winlogbeat
 PS > .\winlogbeat.exe setup -e `
   -E output.logstash.enabled=false `
   -E output.elasticsearch.hosts=['localhost:9200'] `
-  -E output.elasticsearch.username=kibana_system `
-  -E output.elasticsearch.password=5TSW3*MzQQQ8vJpp-bn+ `
+  -E output.elasticsearch.username=elastic `
+  -E output.elasticsearch.password=JX1esNPbZf_ia9G1FTqQ `
   -E setup.kibana.host=172.16.240.240:5601
 
 https://logit.io/sources/configure/windows/
