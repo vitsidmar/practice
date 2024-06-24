@@ -9,7 +9,7 @@ curl -k --user elastic:'pass' https://127.0.0.1:9200
 # Generate an enrollment token for Elasticsearch nodes with
 /usr/share/elasticsearch/bin/elasticsearch-create-enrollment-token -s node
 
-testl logstash config
+test logstash config
 /usr/share/logstash/bin/logstash --path.settings /etc/logstash -t
 ss -tunlp | grep 5044
 logstash logs
@@ -23,6 +23,9 @@ https://www.elastic.co/downloads/beats/winlogbeat
 Install Winlogbeat
 PowerShell.exe -ExecutionPolicy UnRestricted -File .\install-service-winlogbeat.ps1
 Start-Service winlogbeat
+./winlogbeat test config
+./winlogbeat test 
 ./winlogbeat -c winlogbeat.yml -e
+
 https://logit.io/sources/configure/windows/
 https://serveradmin.ru/ustanovka-i-nastroyka-elasticsearch-logstash-kibana-elk-stack/
