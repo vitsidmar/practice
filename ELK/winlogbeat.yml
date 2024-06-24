@@ -1,20 +1,41 @@
+###################### Logit.io Winlogbeat Configuration ########################
+# ============================== Winlogbeat specific options ==============================
 winlogbeat.event_logs:
-  - name: Application
-    ignore_older: 72h
-  - name: Security
-  - name: System
+- name: Application
+  ignore_older: 72h
 
-tags: ["winsrv"]
+- name: System
 
+- name: Security
+
+- name: Microsoft-Windows-Sysmon/Operational
+  tags: [sysmon]
+
+- name: Windows PowerShell
+  event_id: 400, 403, 600, 800
+
+- name: Microsoft-Windows-PowerShell/Operational
+  event_id: 4103, 4104, 4105, 4106
+
+- name: ForwardedEvents
+  tags: [forwarded]    
+
+fields:
+  type: wineventlog
+
+fields_under_root: true  
+
+# ================================== Outputs ===================================
+# ------------------------------ Logstash Output -------------------------------
 output.logstash:
-  hosts: ["10.20.1.56:5044"]
+  hosts: ["172.16.240.240:5044"]
+  loadbalance: true
+  ssl.enabled: true
 
-logging.level: info
-logging.to_files: true
-logging.files:
-  path: C:/ProgramData/Elastic/Beats/winlogbeat
-  name: winlogbeat.log
-  keepfiles: 7
+  pipeline: "winlogbeat-%{[agent.version]}-routing"
 
-
-systemctl start logstash.service
+# ================================= Processors =================================
+processors:
+  - add_host_metadata:
+      when.not.contains.tags: forwarded
+  - add_cloud_metadata: ~
