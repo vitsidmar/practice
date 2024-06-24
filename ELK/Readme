@@ -22,10 +22,10 @@ journalctl -u logstash.service
 https://www.elastic.co/downloads/beats/winlogbeat
 Install Winlogbeat
 PowerShell.exe -ExecutionPolicy UnRestricted -File .\install-service-winlogbeat.ps1
+.\winlogbeat.exe test config -c .\winlogbeat.yml -e
+.\winlogbeat test 
+.\winlogbeat -c winlogbeat.yml -e
 Start-Service winlogbeat
-./winlogbeat test config
-./winlogbeat test 
-./winlogbeat -c winlogbeat.yml -e
 
 https://logit.io/sources/configure/windows/
 https://serveradmin.ru/ustanovka-i-nastroyka-elasticsearch-logstash-kibana-elk-stack/
