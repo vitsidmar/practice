@@ -83,6 +83,11 @@ output {
 EOF
 }
 
+### INSTALL NGINX
+install_NGINX() {
+
+}
+
 install_Elasticsearch
 install_Kibana
 install_Logstash
