@@ -17,9 +17,10 @@ elastic_conf="/etc/elasticsearch/elasticsearch.yml"
 sed -i "s|#node.name: node-1|node.name: elk-node|" $elastic_conf
 sudo sed -i "s|#network.host: 192.168.0.1|network.host: 127.0.0.1|" $elastic_conf
 sudo sed -i "s|http.host: 0.0.0.0|http.host: 127.0.0.1|" $elastic_conf
-cat > /etc/elasticsearch/jvm.options.d/jvm.option <<EOF
+cat > /etc/elasticsearch/jvm.options.d/jvm-heap.options << EOL
+-Xms4g
 -Xmx4g
-EOF
+EOL
 systemctl restart elasticsearch.service
 elastic_new_pass=$(yes | /usr/share/elasticsearch/bin/elasticsearch-reset-password -u elastic)
 elastic_password=$(echo "$elastic_new_pass" | grep "New value:" | awk '{print $3}')
