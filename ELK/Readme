@@ -29,6 +29,11 @@ PowerShell.exe -ExecutionPolicy UnRestricted -File .\install-service-winlogbeat.
 Start-Service winlogbeat
 
 # Winlogbeat Dashboards
+host: "https://172.16.240.240:5601"
+  ssl.verification_mode: none
+  username: "elastic"
+  password: "JX1esNPbZf_ia9G1FTqQ"
+
 PS > .\winlogbeat.exe setup -e `
   -E output.logstash.enabled=false `
   -E output.elasticsearch.hosts=['localhost:9200'] `
