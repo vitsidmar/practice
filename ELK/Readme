@@ -28,15 +28,22 @@ PowerShell.exe -ExecutionPolicy UnRestricted -File .\install-service-winlogbeat.
 .\winlogbeat -c winlogbeat.yml -e
 Start-Service winlogbeat
 
-# Winlogbeat Dashboards
-host: "https://172.16.240.240:5601"
-  ssl.verification_mode: none
-  username: "elastic"
-  password: "JX1esNPbZf_ia9G1FTqQ"
-
+# Winlogbeat upload Dashboards to Kibana
+Configure nginx proxy for elasticsearch
+Install nginx
+apt-get install -y nginx
+vim /etc/nginx/sites-available/elasticsearch
+put config from file nginx_proxy
+ln -s /etc/nginx/sites-available/elasticsearch /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl restart nginx
+test connection
+curl 127.0.0.1:9201
+get ({"error":{"root_cause":[{"type":"security_exception","reason":"missing authentication credentials for REST request ........)
+run in PowerShell
 PS > .\winlogbeat.exe setup -e `
   -E output.logstash.enabled=false `
-  -E output.elasticsearch.hosts=['localhost:9200'] `
+  -E output.elasticsearch.hosts=['172.16.240.240:9201'] `
   -E output.elasticsearch.username=elastic `
   -E output.elasticsearch.password=JX1esNPbZf_ia9G1FTqQ `
   -E setup.kibana.host=172.16.240.240:5601
