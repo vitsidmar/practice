@@ -1,4 +1,4 @@
-Install ELK (tested Ubuntu 22.04)
+Install ELK (tested on Ubuntu 22.04)
 curl -L https://github.com/vitsidmar/practice/raw/main/ELK/install_elk.sh -o install_elk.sh && chmod +x install_elk.sh && ./install_elk.sh
 
 Elasticsearch commands
@@ -29,37 +29,36 @@ PowerShell.exe -ExecutionPolicy UnRestricted -File .\install-service-winlogbeat.
 Start-Service winlogbeat
 
 # Winlogbeat upload Dashboards to Kibana
-Configure nginx proxy for elasticsearch
-Install nginx
+# Configure nginx proxy for elasticsearch
+# Install nginx
 apt-get install -y nginx
 vim /etc/nginx/sites-available/elasticsearch
-put config from file nginx_proxy
+# put config from file nginx_proxy
 ln -s /etc/nginx/sites-available/elasticsearch /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl restart nginx
-test connection
+# test connection
 curl 127.0.0.1:9201
-get ({"error":{"root_cause":[{"type":"security_exception","reason":"missing authentication credentials for REST request ........)
-run in PowerShell
-PS > .\winlogbeat.exe setup -e `
+# get ({"error":{"root_cause":[{"type":"security_exception","reason":"missing authentication credentials for REST request ........)
+# run in PowerShell
+.\winlogbeat.exe setup -e `
   -E output.logstash.enabled=false `
   -E output.elasticsearch.hosts=['172.16.240.240:9201'] `
   -E output.elasticsearch.username=elastic `
   -E output.elasticsearch.password=JX1esNPbZf_ia9G1FTqQ `
   -E setup.kibana.host=172.16.240.240:5601
 
+# Test system configuration
+http://172.16.240.240:5601
+# Login: elastic
+# Password: JX1esNPbZf_ia9G1FTqQ
+# kibana_system
+# 5TSW3*MzQQQ8vJpp-bn+
+
+# API key Win_Dashboards
+# 05p_SpAB7ndNIf_RdTqf:onkD3uU1QD22FERvu6yhKw
+
 https://logit.io/sources/configure/windows/
 https://serveradmin.ru/ustanovka-i-nastroyka-elasticsearch-logstash-kibana-elk-stack/
-
-
-http://172.16.240.240:5601
-Login: elastic
-Password: JX1esNPbZf_ia9G1FTqQ
-kibana_system
-5TSW3*MzQQQ8vJpp-bn+
-
-API key Win_Dashboards
-05p_SpAB7ndNIf_RdTqf:onkD3uU1QD22FERvu6yhKw
-
 https://std.rocks/gnulinux_siem_03_winlogbeat_v8.html
 https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://www.youtube.com/watch%3Fv%3DQVRvrrjrxlM&ved=2ahUKEwj4zpPD9PSGAxUH9gIHHYoHO9UQz40FegQIFhAV&usg=AOvVaw0TfLCMfeQ3rEsy8j-BAsWq
