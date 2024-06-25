@@ -19,9 +19,9 @@ journalctl -u logstash.service
 ### INSTALL Winlogbeat
 # Download MSI and install
 https://www.elastic.co/downloads/beats/winlogbeat
-Install Winlogbeat MSI
+# Install Winlogbeat MSI
 cd 'C:\Program Files\Elastic\Beats\8.14.1\winlogbeat'
-Create and configure file winlogbeat.yml
+# Create and configure file winlogbeat.yml
 PowerShell.exe -ExecutionPolicy UnRestricted -File .\install-service-winlogbeat.ps1
 .\winlogbeat.exe test config
 .\winlogbeat test output
