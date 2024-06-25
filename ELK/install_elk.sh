@@ -85,7 +85,14 @@ EOF
 
 ### INSTALL NGINX
 install_NGINX() {
+apt-get install -y nginx
+cat > /etc/nginx/sites-available/elasticsearch <<EOF 
 
+EOF
+# put config from file nginx_proxy
+ln -s /etc/nginx/sites-available/elasticsearch /etc/nginx/sites-enabled/
+nginx -t
+systemctl restart nginx
 }
 
 install_Elasticsearch
