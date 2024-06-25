@@ -124,6 +124,7 @@ systemctl restart nginx
 install_Elasticsearch
 install_Kibana
 install_Logstash
+install_NGINX
 
 ss -tunlp | grep 9200
 ss -tunlp | grep 5601
