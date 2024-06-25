@@ -16,7 +16,7 @@ systemctl start elasticsearch.service
 elastic_conf="/etc/elasticsearch/elasticsearch.yml"
 sed -i "s|#node.name: node-1|node.name: elk-node|" $elastic_conf
 sudo sed -i "s|#network.host: 192.168.0.1|network.host: 127.0.0.1|" $elastic_conf
-#sudo sed -i "s|http.host: 0.0.0.0|http.host: 127.0.0.1|" $elastic_conf
+sudo sed -i "s|http.host: 0.0.0.0|http.host: 127.0.0.1|" $elastic_conf
 cat > /etc/elasticsearch/jvm.options.d/jvm.option <<EOF
 -Xmx4g
 EOF
