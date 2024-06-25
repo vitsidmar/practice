@@ -15,6 +15,7 @@ Netzwerkkonfiguration und Sicherheit
   o Testen der Firewall-Regeln und Sicherstellung, dass sie korrekt funktionieren:
     ▪ Durchführung von Penetrationstests und Portscans.
     ▪ Dokumentation der Ergebnisse und Anpassung der Regeln bei Bedarf.
+CIS DISA Tenable
 
 System- und Sicherheitsmanagement
 3. Automatisierte Backups:
