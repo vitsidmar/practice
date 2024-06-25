@@ -87,9 +87,35 @@ EOF
 install_NGINX() {
 apt-get install -y nginx
 cat > /etc/nginx/sites-available/elasticsearch <<EOF 
+upstream elasticsearch {
+    server 127.0.0.1:9200;
+    keepalive 64;
+}
 
+server {
+    listen 9201;
+    server_name search.proxy;
+    client_max_body_size 50m;
+
+    location / {
+        proxy_pass https://elasticsearch;
+        proxy_redirect off;
+        proxy_http_version 1.1;
+        proxy_set_header Connection "";
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $http_host;
+        proxy_pass_header Access-Control-Allow-Origin;
+        proxy_pass_header Access-Control-Allow-Methods;
+        proxy_hide_header Access-Control-Allow-Headers;
+        add_header Access-Control-Allow-Headers 'X-Requested-With, Content-Type';
+        add_header Access-Control-Allow-Credentials true;
+
+        # SSL configuration
+        proxy_ssl_verify off;
+    }
+}
 EOF
-# put config from file nginx_proxy
 ln -s /etc/nginx/sites-available/elasticsearch /etc/nginx/sites-enabled/
 nginx -t
 systemctl restart nginx
