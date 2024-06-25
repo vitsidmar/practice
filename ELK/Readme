@@ -35,8 +35,8 @@ apt-get install -y nginx
 vim /etc/nginx/sites-available/elasticsearch
 # put config from file nginx_proxy
 ln -s /etc/nginx/sites-available/elasticsearch /etc/nginx/sites-enabled/
-sudo nginx -t
-sudo systemctl restart nginx
+nginx -t
+systemctl restart nginx
 # test connection
 curl 127.0.0.1:9201
 # get ({"error":{"root_cause":[{"type":"security_exception","reason":"missing authentication credentials for REST request ........)
@@ -47,6 +47,9 @@ curl 127.0.0.1:9201
   -E output.elasticsearch.username=elastic `
   -E output.elasticsearch.password=JX1esNPbZf_ia9G1FTqQ `
   -E setup.kibana.host=172.16.240.240:5601
+# Delete symlink
+rm /etc/nginx/sites-enabled/elasticsearch
+systemctl restart nginx
 
 # Test system configuration
 http://172.16.240.240:5601
