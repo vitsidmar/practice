@@ -53,6 +53,7 @@ Skripting und Automatisierung
     ▪ Schreiben eines Skripts zur Abfrage spezifischer Ereignisprotokolle.
     ▪ Konfiguration des Skripts zur Erstellung und Versendung von Berichten.
     ▪ Planen des Skripts zur regelmäßigen Ausführung mittels Task Scheduler.
+Windows error reporting
 
 Fortgeschrittene Aufgaben
 7. Hochverfügbarkeit und Lastverteilung:
