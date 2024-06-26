@@ -1,51 +1,59 @@
 # CSV: Login; Password; LastName; FirstName; MiddleName; OU; JobTitle
 # powershell -ExecutionPolicy Bypass -File C:\User\vital\Downloads\add_user_AD.ps1
+# Імпорт модуля Active Directory
 Import-Module ActiveDirectory
 
-# Funktion für die Auswahl einer Datei über ein Dialogfenster
+# Функція для вибору файлу через діалогове вікно
 function Select-FileDialog {
     [System.Reflection.Assembly]::LoadWithPartialName("System.Windows.Forms") | Out-Null
     $OpenFileDialog = New-Object System.Windows.Forms.OpenFileDialog
-    $OpenFileDialog.Filter = "CSV-Dateien (*.csv)|*.csv"
+    $OpenFileDialog.Filter = "CSV files (*.csv)|*.csv"
     $OpenFileDialog.ShowDialog() | Out-Null
     return $OpenFileDialog.FileName
 }
 
-# Funktion für die Eingabe der Domain über ein Dialogfenster
+# Функція для введення домену через діалогове вікно
 function Get-DomainInput {
     Add-Type -AssemblyName Microsoft.VisualBasic
-    $domain = [Microsoft.VisualBasic.Interaction]::InputBox("Geben Sie die Domain im Format migrate.local ein", "Domain Auswahl", "migrate.local")
+    $domain = [Microsoft.VisualBasic.Interaction]::InputBox("Введіть домен у форматі migrate.local", "Вибір домену", "migrate.local")
     return $domain
 }
 
-# Eingabe der Domain über ein Dialogfenster
+# Введення домену через діалогове вікно
 $domain = Get-DomainInput
 
-# Überprüfung, ob die Domain eingegeben wurde
+# Перевірка, чи домен був введений
 if ($domain -ne "") {
-    # Aufruf der Funktion zur Auswahl der Datei
+    # Виклик функції для вибору файлу
     $csvPath = Select-FileDialog
 
-    # Überprüfung, ob eine Datei ausgewählt wurde
+    # Перевірка, чи файл був вибрано
     if ($csvPath -ne "") {
-        # Importieren der CSV-Datei mit dem angegebenen Trennzeichen
+        # Імпорт CSV файлу з вказаним роздільником
         $Users = Import-Csv -Path $csvPath -Delimiter ';'
 
-        # Abrufen aller Organisationseinheiten
+        # Отримання всіх організаційних одиниць
         $allou = Get-ADOrganizationalUnit -Filter * -SearchBase "DC=$($domain -replace '\.',',DC=')"
 
+        # Пошук або створення організаційної одиниці "Andere" (інші)
+        $OtherOU = $allou | Where-Object {$_.Name -eq "Andere"}
+        if (-not $OtherOU) {
+            $OtherOU = New-ADOrganizationalUnit -Name "Andere" -Path "DC=$($domain -replace '\.',',DC=')"
+            Write-Host "Створено нову організаційну одиницю 'Andere'."
+        }
+
         foreach ($User in $Users) {
-            # Suchen der entsprechenden OU
+            # Пошук відповідної OU
             $ou = $allou | Where-Object {$_.Name -eq $User.OU}
             
-            # Verwenden der gefundenen OU oder der Standard-OU
+            # Використання знайденої OU або створення нової "Andere"
             if ($ou) {
                 $OU = $ou.DistinguishedName
             } else {
-                $OU = "OU=Andere,DC=$($domain -replace '\.',',DC=')"  # Wenn der Katalog mit diesem Namen nicht gefunden wird, senden wir ihn an OU "Andere"
+                $OU = $OtherOU.DistinguishedName
             }
             
-            # Lesen der Benutzerdaten
+            # Зчитування даних користувача
             $Password = $User.Password
             $Detailedname = $User.LastName + " " + $User.FirstName + " " + $User.MiddleName
             $UserFirstname = $User.FirstName
@@ -54,7 +62,7 @@ if ($domain -ne "") {
             $SAM = $User.Login + "@$domain"
             
             try {
-                # Erstellen eines neuen Benutzers im Active Directory
+                # Створення нового користувача в Active Directory
                 New-ADUser -Name $Detailedname `
                     -SamAccountName $User.Login `
                     -UserPrincipalName $SAM `
@@ -67,16 +75,16 @@ if ($domain -ne "") {
                     -Path $OU `
                     -ChangePasswordAtLogon $true
                 
-                Write-Host "Benutzer $($User.Login) erfolgreich erstellt."
+                Write-Host "Користувач $($User.Login) створений успішно."
             } catch {
-                Write-Host "Fehler beim Erstellen des Benutzers $($User.Login): $_"
+                Write-Host "Помилка створення користувача $($User.Login): $_"
             }
         }
 
-        Write-Host "Der Prozess zur Erstellung der Benutzer wurde abgeschlossen."
+        Write-Host "Процес створення користувачів завершено."
     } else {
-        Write-Host "Es wurde keine Datei ausgewählt."
+        Write-Host "Файл не було вибрано."
     }
 } else {
-    Write-Host "Die Domain wurde nicht eingegeben."
+    Write-Host "Домен не було введено."
 }
