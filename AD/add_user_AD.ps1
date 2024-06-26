@@ -1,5 +1,6 @@
 # CSV: Login; Password; LastName; FirstName; MiddleName; OU; JobTitle
 # powershell -ExecutionPolicy Bypass -File C:\User\vital\Downloads\add_user_AD.ps1
+# Import des Active Directory-Moduls
 Import-Module ActiveDirectory
 
 # Funktion für die Auswahl einer Datei über ein Dialogfenster
@@ -14,7 +15,7 @@ function Select-FileDialog {
 # Funktion für die Eingabe der Domain über ein Dialogfenster
 function Get-DomainInput {
     Add-Type -AssemblyName Microsoft.VisualBasic
-    $domain = [Microsoft.VisualBasic.Interaction]::InputBox("Geben Sie die Domain im Format migrate.local ein", "Domain Auswahl", "migrate.local")
+    $domain = [Microsoft.VisualBasic.Interaction]::InputBox("Geben Sie die Domain im Format ss.net.ua ein", "Domain Auswahl", "ss.net.ua")
     return $domain
 }
 
@@ -31,25 +32,28 @@ if ($domain -ne "") {
         # Importieren der CSV-Datei mit dem angegebenen Trennzeichen
         $Users = Import-Csv -Path $csvPath -Delimiter ';'
 
-        # Abrufen aller Organisationseinheiten
-        $allou = Get-ADOrganizationalUnit -Filter * -SearchBase "DC=$($domain -replace '\.',',DC=')"
-
         foreach ($User in $Users) {
             # Suchen der entsprechenden OU
-            $ou = $allou | Where-Object {$_.Name -eq $User.OU}
+            $ou = Get-ADOrganizationalUnit -Filter "Name -eq '$($User.OU)'" -SearchBase "DC=$($domain -replace '\.',',DC=')"
             
             # Verwenden der gefundenen OU oder Erstellen einer neuen OU
             if ($ou) {
                 $OU = $ou.DistinguishedName
             } else {
-                $newOUName = "Andere"
+                $newOUName = $User.OU
                 $newOUDN = "OU=$newOUName,DC=$($domain -replace '\.',',DC=')"
                 
-                # Erstellen einer neuen OU, wenn sie nicht vorhanden ist
-                New-ADOrganizationalUnit -Name $newOUName -Path "DC=$($domain -replace '\.',',DC=')"
-                
-                $OU = $newOUDN
-                Write-Host "Neue OU '$newOUName' wurde erstellt."
+                try {
+                    # Erstellen einer neuen OU, wenn sie nicht vorhanden ist
+                    New-ADOrganizationalUnit -Name $newOUName -Path "DC=$($domain -replace '\.',',DC=')"
+                    
+                    $OU = $newOUDN
+                    Write-Host "Neue OU '$newOUName' wurde erfolgreich erstellt."
+                } catch {
+                    Write-Host "Fehler beim Erstellen der OU '$newOUName': $_"
+                    # Setze $OU auf eine Standard-OU oder handle den Fehler entsprechend
+                    $OU = "OU=Andere,DC=$($domain -replace '\.',',DC=')"
+                }
             }
             
             # Lesen der Benutzerdaten
@@ -87,3 +91,4 @@ if ($domain -ne "") {
 } else {
     Write-Host "Die Domain wurde nicht eingegeben."
 }
+
