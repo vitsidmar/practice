@@ -50,7 +50,7 @@ if ($domain -ne "") {
                     $OU = $newOUDN
                     Write-Host "Neue OU '$newOUName' wurde erfolgreich erstellt."
                 } catch {
-                    Write-Host "Fehler beim Erstellen der OU '$newOUName': $_"
+                    #Write-Host "Fehler beim Erstellen der OU '$newOUName': $_"
                     # Setze $OU auf eine Standard-OU oder handle den Fehler entsprechend
                     $OU = "OU=Andere,DC=$($domain -replace '\.',',DC=')"
                 }
