@@ -1,0 +1,8 @@
+SMTP server 
+sudo apt-get update && apt-get install mailutils postfix
+/etc/postfix/main.cf
+myhostname = yourhostname.example.com
+myorigin = localhost
+inet_interfaces = loopback-only
+sudo systemctl restart postfix
+echo "Test message" | mail -s "Test subject" recipient@example.com
