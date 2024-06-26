@@ -1,6 +1,5 @@
 # CSV: Login; Password; LastName; FirstName; MiddleName; OU; JobTitle
 # powershell -ExecutionPolicy Bypass -File C:\User\vital\Downloads\add_user_AD.ps1
-# Import des Active Directory-Moduls
 Import-Module ActiveDirectory
 
 # Funktion für die Auswahl einer Datei über ein Dialogfenster
