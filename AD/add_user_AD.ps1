@@ -12,7 +12,7 @@ function Select-FileDialog {
 # Funktion für die Eingabe der Domain über ein Dialogfenster
 function Get-DomainInput {
     Add-Type -AssemblyName Microsoft.VisualBasic
-    $domain = [Microsoft.VisualBasic.Interaction]::InputBox("Geben Sie die Domain im Format ss.net.ua ein", "Domain Auswahl", "ss.net.ua")
+    $domain = [Microsoft.VisualBasic.Interaction]::InputBox("Geben Sie die Domain im Format migrate.local ein", "Domain Auswahl", "migrate.local")
     return $domain
 }
 
