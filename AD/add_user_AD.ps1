@@ -1,3 +1,4 @@
+#CSV Login; Password; LastName; FirstName; MiddleName; OU; JobTitle
 Import-Module ActiveDirectory
 
 # Funktion für die Auswahl einer Datei über ein Dialogfenster
