@@ -1,0 +1,11 @@
+# Save rules install
+apt install iptables-persistent
+# Save rules
+service netfilter-persistent save
+iptables-restore < /etc/iptables/rules.v4
+
+iptables -A INPUT -p tcp --dport 80 -j LOG --log-prefix "ACCESS RESTRICTED: "
+iptables -A INPUT -p tcp -m multiport --dports 22,80,443 -j ACCEPT
+
+
+https://selectel.ru/blog/setup-iptables-linux/
