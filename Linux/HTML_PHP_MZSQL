@@ -1,0 +1,65 @@
+# SQL configure
+mysql -u root -p
+CREATE DATABASE komments;
+USE komments;
+CREATE TABLE messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    text TEXT NOT NULL
+);
+CREATE USER 'sqluser'@'localhost' IDENTIFIED BY 'pass';
+GRANT ALL PRIVILEGES ON komments.* TO 'sqluser'@'localhost';
+FLUSH PRIVILEGES;
+exit;
+
+
+# HTML Forma
+<form id="form_koment" method="post" action="add.php">
+    <p>Name</p>
+    <input type="text" name="name"><br>
+    <p>Nachrichten</p>
+    <textarea cols="70" rows="10" name="text"></textarea><br>
+    <input type="submit" name="add" value="Hinzufugen"><br>
+</form>
+
+# PHP script
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Formulardaten sammeln
+    $name = $_POST['name'];
+    $text = $_POST['text'];
+
+    // Verbindungsparameter zur Datenbank
+    $db_host = "localhost";
+    $db_user = "sqluser";
+    $db_password = "pass";
+    $db_name = "komments";
+
+    // Mit der Datenbank verbinden
+    $db = mysqli_connect($db_host, $db_user, $db_password, $db_name);
+
+    // Verbindung prüfen
+    if (!$db) {
+        die("Verbindung fehlgeschlagen: " . mysqli_connect_error());
+    }
+
+    // Kodierung auf UTF-8 setzen
+    mysqli_set_charset($db, "utf8");
+
+    // Eingaben escapen, um SQL-Injection zu verhindern
+    $name = mysqli_real_escape_string($db, $name);
+    $text = mysqli_real_escape_string($db, $text);
+
+    // Daten in die Datenbank einfügen
+    $sql = "INSERT INTO messages (id, name, text) VALUES (NULL, '$name', '$text')";
+
+    if (mysqli_query($db, $sql)) {
+        echo "Informationen wurden in die Datenbank eingetragen";
+    } else {
+        echo "Fehler: " . $sql . "<br>" . mysqli_error($db);
+    }
+
+    // Datenbankverbindung schließen
+    mysqli_close($db);
+}
+?>
