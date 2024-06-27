@@ -12,18 +12,31 @@ $events = Get-WinEvent -FilterHashtable @{
 
 # Überprüfen der Anzahl der gefundenen Ereignisse
 if ($events -eq $null -or $events.Count -eq 0) {
-    Write-Host "Keine fehlgeschlagenen Anmeldeversuche in den letzten 7 Tagen."
+    $body = "Keine fehlgeschlagenen Anmeldeversuche in den letzten 7 Tagen."
 } else {
     # Auswahl der relevanten Eigenschaften
     $events = $events | Select-Object TimeCreated, Id, Message
     
     # Ausgabe der Anzahl fehlgeschlagener Anmeldeversuche
     $totalFailedAttempts = $events.Count
-    Write-Host "Anzahl fehlgeschlagener Anmeldeversuche in den letzten 7 Tagen: $totalFailedAttempts"
-
+    $body = "Anzahl fehlgeschlagener Anmeldeversuche in den letzten 7 Tagen: $totalFailedAttempts`n`n"
+    
     # Erstellen des Berichts als CSV-Datei
     $reportPath = "C:\Temp\FailedLogonAttemptsReport.csv"
     $events | Export-Csv -Path $reportPath -NoTypeInformation
 
-    Write-Host "Bericht erstellt unter: $reportPath"
+    $body += "Bericht erstellt unter: $reportPath"
 }
+
+# E-Mail Parameter
+$smtpServer = "smtp.migrate.local"
+$from = "winevent@smtp.migrate.lokal"
+$to = "vitalii.stepchuk@sidmar.ch"
+$subject = "Bericht über fehlgeschlagene Anmeldeversuche"
+$body = $body
+
+# Send-MailMessage zur Übermittlung des Berichts
+Send-MailMessage -SmtpServer $smtpServer -From $from -To $to -Subject $subject -Body $body
+
+# Ausgabe des Ergebnisses auf der Konsole
+Write-Host $body
