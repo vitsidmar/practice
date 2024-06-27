@@ -1,0 +1,103 @@
+
+update_repository() {
+    sudo apt update
+}
+install_apache() {
+    sudo apt -y install apache2
+}
+install_mysql() {
+    sudo apt -y install mysql-server mysql-client
+}
+install_php() {
+    sudo apt install software-properties-common --yes
+    sudo add-apt-repository -y ppa:ondrej/php
+    sudo apt update
+    sudo apt -y install php8.2 php8.2-curl php8.2-dom php8.2-mbstring php8.2-xml php8.2-mysql zip unzip
+}
+enable_url_rewriting() {
+    sudo a2enmod rewrite
+    sudo systemctl restart apache2
+}
+install_composer() {
+    cd /usr/bin
+    curl -sS https://getcomposer.org/installer | sudo php -q
+    if [ ! -f "composer" ]; then
+        sudo mv composer.phar composer
+    fi
+}
+clone_laravel_repo() {
+    sudo chown -R $USER:$USER /var/www
+    cd /var/www
+    if [ ! -d "laravel" ]; then
+       git clone https://github.com/laravel/laravel.git
+    fi
+}
+install_composer_in_project() {
+    cd /var/www/laravel
+    composer update --no-interaction
+}
+build_env_file() {
+    cd /var/www/laravel
+    if [ ! -f ".env" ]; then
+        cp .env.example .env
+    fi
+    sudo php artisan key:generate
+    sudo chown -R www-data storage
+    sudo chown -R www-data bootstrap/cache
+
+}
+create_apache_config() {
+    sudo bash -c 'cat > /etc/apache2/sites-available/laravel.conf <<EOF
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    ServerName localhost
+    ServerAlias localhost
+    DocumentRoot /var/www/laravel/public
+
+    <Directory /var/www/laravel/public>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    ErrorLog ${APACHE_LOG_DIR}/laravel-error.log
+    CustomLog ${APACHE_LOG_DIR}/laravel-access.log combined
+</VirtualHost>
+EOF'
+
+  cd ~
+    sudo a2dissite 000-default.conf
+    sudo a2ensite laravel.conf
+    sudo systemctl restart apache2
+}
+create_database_and_user() {
+    sudo systemctl start mysql
+    sudo mysql -uroot -e "CREATE DATABASE IF NOT EXISTS laravel;"
+    sudo mysql -uroot -e "CREATE USER IF NOT EXISTS 'vagrant'@'localhost' IDENTIFIED BY '1805';"
+    sudo mysql -uroot -e "GRANT ALL PRIVILEGES ON laravel.* TO 'vagrant'@'localhost';"
+
+    cd /var/www/laravel
+    grep -qF 'DB_CONNECTION=mysql' .env && sed -i 's/DB_CONNECTION=mysql/DB_CONNECTION=mysql/' .env || echo "DB_CONNECTION=mysql" >> .env
+    grep -qF 'DB_HOST=localhost' .env && sed -i 's/DB_HOST=localhost/DB_HOST=localhost/' .env || echo "DB_HOST=localhost" >> .env
+    grep -qF 'DB_PORT=3306' .env && sed -i 's/DB_PORT=3306/DB_PORT=3306/' .env || echo "DB_PORT=3306" >> .env
+    grep -qF 'DB_DATABASE=laravel' .env && sed -i 's/DB_DATABASE=laravel/DB_DATABASE=laravel/' .env || echo "DB_DATABASE=laravel" >> .env
+    grep -qF 'DB_USERNAME=vagrant' .env && sed -i 's/DB_USERNAME=vagrant/DB_USERNAME=vagrant/' .env || echo "DB_USERNAME=vagrant" >> .env
+    grep -qF 'DB_PASSWORD=1805' .env && sed -i 's/DB_PASSWORD=1805/DB_PASSWORD=1805/' .env || echo "DB_PASSWORD=1805" >> .env
+
+    sudo php artisan storage:link
+    sudo php artisan migrate --force
+    sudo php artisan db:seed --force
+    sudo systemctl restart apache2
+
+}
+update_repository
+install_apache
+install_mysql
+install_php
+enable_url_rewriting
+install_composer
+clone_laravel_repo
+install_composer_in_project
+build_env_file
+create_apache_config
+create_database_and_user
