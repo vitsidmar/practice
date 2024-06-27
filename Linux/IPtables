@@ -8,4 +8,4 @@ iptables -A INPUT -p tcp --dport 80 -j LOG --log-prefix "ACCESS RESTRICTED: "
 iptables -A INPUT -p tcp -m multiport --dports 22,80,443 -j ACCEPT
 
 
-https://selectel.ru/blog/setup-iptables-linux/
+https://synay.net/support/kb/setting-iptables-firewall-debian-12
