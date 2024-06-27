@@ -1,8 +1,16 @@
 SMTP server 
 sudo apt-get update && apt-get install mailutils postfix
 /etc/postfix/main.cf
-myhostname = yourhostname.example.com
-myorigin = localhost
-inet_interfaces = loopback-only
+myorigin = /etc/mailname (myorigin = localhost)
+myhostname = eventlogs.mail
+relayhost =
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+inet_interfaces = all
 sudo systemctl restart postfix
 echo "Test message" | mail -s "Test subject" recipient@example.com
+/etc/postfix/sasl_passwd "[smtp.example.com]:587 ваш_логін:ваш_пароль"
+vim /etc/mailname "eventlogs.mail"
+postmap /etc/postfix/sasl_passwd
+chmod 600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
