@@ -36,7 +36,25 @@ sudo chown $USER.$USER ~/client-configs/keys/*
 mkdir -p ~/client-configs/files
 echo " " > ~/client-configs/base.conf
 # config file https://github.com/OpenVPN/openvpn/blob/master/sample/sample-config-files/client.conf
-nano ~/client-configs/make_config.sh
+cat >  ~/client-configs/make_config.sh << EOL
+#!/bin/bash
+# First argument: Client identifier
+KEY_DIR=~/client-configs/keys
+OUTPUT_DIR=~/client-configs/files
+BASE_CONFIG=~/client-configs/base.conf
+cat ${BASE_CONFIG} \
+    <(echo -e '<ca>') \
+    ${KEY_DIR}/ca.crt \
+    <(echo -e '</ca>\n<cert>') \
+    ${KEY_DIR}/${1}.crt \
+    <(echo -e '</cert>\n<key>') \
+    ${KEY_DIR}/${1}.key \
+    <(echo -e '</key>\n<tls-crypt>') \
+    ${KEY_DIR}/ta.key \
+    <(echo -e '</tls-crypt>') \
+    > ${OUTPUT_DIR}/${1}.ovpn
+EOL
+chmod 700 ~/client-configs/make_config.sh
 cd ~/client-configs
 ./make_config.sh client001
 ls ~/client-configs/files/
