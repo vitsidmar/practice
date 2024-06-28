@@ -1,5 +1,5 @@
-sudo apt update && apt upgrade
-sudo apt install openvpn easy-rsa
+sudo apt update && apt upgrade -y
+sudo apt install -y openvpn easy-rsa
 mkdir ~/easy-rsa
 ln -s /usr/share/easy-rsa/* ~/easy-rsa/
 sudo chown $USER ~/easy-rsa
