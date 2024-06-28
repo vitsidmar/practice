@@ -1,3 +1,4 @@
+
 SMTP server 
 sudo apt-get update && apt-get install mailutils postfix
 /etc/postfix/main.cf
@@ -11,3 +12,4 @@ inet_interfaces = all
 sudo systemctl restart postfix
 echo "Test message" | mail -s "Test subject" recipient@example.com
 
+echo "/^Message-ID:$/ REPLACE Message-ID: <${message_id}>" > /etc/postfix/header_checks
