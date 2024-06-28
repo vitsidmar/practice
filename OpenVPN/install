@@ -1,0 +1,43 @@
+sudo apt update
+sudo apt upgrade
+sudo apt install openvpn
+sudo apt install easy-rsa
+mkdir ~/easy-rsa
+ln -s /usr/share/easy-rsa/* ~/easy-rsa/
+sudo chown $USER ~/easy-rsa
+chmod 700 ~/easy-rsa
+
+cd ~/easy-rsa
+nano vars
+set_var EASYRSA_ALGO "ec"
+set_var EASYRSA_DIGEST "sha512"
+./easyrsa init-pki
+./easyrsa build-ca
+
+cd ~/easy-rsa
+./easyrsa gen-req $(uname -n) nopass
+sudo cp ~/easy-rsa/pki/private/$(uname -n).key /etc/openvpn/server/
+./easyrsa sign-req server $(uname -n)
+sudo cp ~/easy-rsa/pki/issued/$(uname -n).crt /etc/openvpn/server
+sudo cp ~/easy-rsa/pki/ca.crt /etc/openvpn/server
+cd ~/easy-rsa
+openvpn --genkey secret ta.key
+sudo cp ta.key /etc/openvpn/server
+sudo ls /etc/openvpn/server
+# check keys SRV-VPN.crt  SRV-VPN.key  ca.crt ta.key
+sudo ls /etc/openvpn/server
+
+mkdir -p ~/client-configs/keys
+chmod -R 700 ~/client-configs
+cd ~/easy-rsa
+./easyrsa gen-req client001 nopass
+cp ~/easy-rsa/pki/private/client001.key ~/client-configs/keys/
+./easyrsa sign-req client client001
+cp ~/easy-rsa/ta.key ~/client-configs/keys/
+sudo cp /etc/openvpn/server/ca.crt ~/client-configs/keys/
+cp ~/easy-rsa/pki/issued/client001.crt ~/client-configs/keys/
+sudo chown $USER.$USER ~/client-configs/keys/*
+mkdir -p ~/client-configs/files
+nano ~/client-configs/base.conf
+# config file https://github.com/OpenVPN/openvpn/blob/master/sample/sample-config-files/client.conf
+nano ~/client-configs/make_config.sh
