@@ -41,3 +41,10 @@ mkdir -p ~/client-configs/files
 nano ~/client-configs/base.conf
 # config file https://github.com/OpenVPN/openvpn/blob/master/sample/sample-config-files/client.conf
 nano ~/client-configs/make_config.sh
+cd ~/client-configs
+./make_config.sh client001
+ls ~/client-configs/files/
+
+sudo nano /etc/openvpn/server/server.conf
+# sample of config file https://github.com/OpenVPN/openvpn/blob/master/sample/sample-config-files/server.conf
+
