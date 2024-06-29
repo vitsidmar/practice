@@ -76,3 +76,5 @@ systemctl status openvpn-eventlog@eventlog.service
 
 
 # Windows10 OpenVPN client https://openvpn.net/community-downloads/
+# https://github.com/hwdsl2/openvpn-install/blob/master/README.md
+# https://github.com/Nyr/openvpn-install
