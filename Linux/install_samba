@@ -1,4 +1,5 @@
-apt -y update && sudo apt -y install samba
+apt -y update && sudo apt -y install samba samba-client cifs-utils
+
 systemctl enable smbd
 systemctl start smbd
 
