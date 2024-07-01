@@ -10,7 +10,7 @@ sudo systemctl enable apache2
 sudo systemctl start apache2
 
 # Adjust Firewall
-sudo ufw allow in "Apache Full"
+#sudo ufw allow in "Apache Full"
 
 # Allow Read/Write for Owner
 sudo chmod -R 0755 /var/www/html/
