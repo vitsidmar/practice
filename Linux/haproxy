@@ -1,0 +1,4 @@
+# https://haproxy.debian.net/
+apt-get install --no-install-recommends software-properties-common
+add-apt-repository ppa:vbernat/haproxy-3.0
+apt-get install haproxy=3.0.\*
