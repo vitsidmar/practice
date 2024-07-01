@@ -2,3 +2,36 @@
 apt-get install --no-install-recommends software-properties-common
 add-apt-repository ppa:vbernat/haproxy-3.0
 apt-get install haproxy=3.0.\*
+
+cat /etc/haproxy/haproxy.cfg
+global
+    log /dev/log    local0
+    log /dev/log    local1 notice
+    maxconn 4096
+    tune.ssl.default-dh-param 2048
+
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    timeout connect 5000
+    timeout client  50000
+    timeout server  50000
+
+frontend http-in
+    bind *:80
+    default_backend servers
+
+backend servers
+    balance roundrobin
+    server server1 172.16.240.199:80 check
+    server server2 172.16.240.29:80 check
+
+listen stats
+    bind :9000
+    mode http
+    stats enable
+    stats hide-version
+    stats uri /haproxy-stats
+    stats realm HAProxy\ Statistics
