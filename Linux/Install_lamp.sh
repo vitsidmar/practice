@@ -1,10 +1,7 @@
 #!/bin/bash
 
-# Update Package Index
-sudo apt update
-
-# Install Apache2, MySQL, PHP
-sudo apt install apache2 mysql-server php php-mysql libapache2-mod-php php-cli
+apt -y update && apt -y upgrade
+apt install -y apache2 mysql-server php php-mysql libapache2-mod-php php-cli
 
 # Allow to run Apache on boot up
 sudo systemctl enable apache2
