@@ -1,5 +1,5 @@
 #!/bin/bash
-
+sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 apt -y update && apt -y upgrade
 apt install -y apache2 mysql-server php php-mysql libapache2-mod-php php-cli
 
