@@ -35,3 +35,6 @@ listen stats
     stats hide-version
     stats uri /haproxy-stats
     stats realm HAProxy\ Statistics
+
+
+# http://172.16.240.200:9000/haproxy-stats
