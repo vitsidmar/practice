@@ -1,3 +1,5 @@
+# Windows https://www.dmosk.ru/instruktions.php?object=iis-php
+
 # SQL configure
 mysql -u root -p
 CREATE DATABASE komments;
