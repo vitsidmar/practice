@@ -1,1 +1,14 @@
 fw.msc
+
+netsh advfirewall firewall add rule name="Block Port 135" dir=in action=block
+protocol=TCP localport=135
+netsh advfirewall firewall add rule name="Block Port 139" dir=in action=block
+protocol=TCP localport=139
+netsh advfirewall firewall add rule name="Block Port 445" dir=in action=block
+protocol=TCP localport=445
+netsh advfirewall firewall add rule name="Block Port 3389" dir=in action=block
+protocol=TCP localport=3389
+netsh advfirewall firewall add rule name="Block Port 5985" dir=in action=block
+protocol=TCP localport=5985
+netsh advfirewall firewall add rule name="Block Port 5986" dir=in action=block
+protocol=TCP localport=5986
