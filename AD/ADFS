@@ -6,12 +6,14 @@ or activiert
 Set-AdfsProperties -EnableIdPInitiatedSignonPage $true
 and
 https://adfs.migrate.local/adfs/ls/idpinitiatedsignon
+
 # ADFS metadata https://adfs.migrate.local/FederationMetadata/2007-06/federationmetadata.xml
 entityID="https://adfs.migrate.local/adfs/services/trust"
 SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://adfs.migrate.local/adfs/ls/"
 SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://adfs.migrate.local/adfs/ls/"
 SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://adfs.migrate.local/adfs/ls/"
 X509Certificate
+
 
 https://support.indeed-company.ru/Knowledgebase/Article/View/instrukciya-po-ustanovke-adfs-extension-dlya-ea-server-70
 
