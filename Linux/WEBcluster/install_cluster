@@ -121,4 +121,6 @@ virtual_server 172.16.240.10 53 {
 }
 EOL
 
+nginx -s reload && /etc/init.d/keepalived reload
+
 
