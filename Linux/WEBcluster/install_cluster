@@ -18,7 +18,7 @@ EOL
 
 mkdir /etc/nginx/stream-enabled
 
-cat > /etc/nginx/sites-enabled/web_servers.conf << EOL
+cat > /etc/nginx/sites-available/web_servers.conf << EOL
 upstream web_servers {
     server 172.16.240.198:80;
     server 172.16.240.199:80;
@@ -39,7 +39,9 @@ server {
 }
 EOL
 
-cat > /etc/nginx/stream-enabled/dns_servers.conf << EOL
+sudo ln -s /etc/nginx/sites-available/web_servers.conf /etc/nginx/sites-enabled/
+
+cat > /etc/nginx/stream-available/dns_servers.conf << EOL
 upstream dns_servers {
     server 172.16.240.21:53;
     server 8.8.8.8:53;
@@ -53,6 +55,7 @@ server {
 }
 EOL
 
+sudo ln -s /etc/nginx/sites-available/dns_servers.conf /etc/nginx/sites-enabled/
 
 cat >> /etc/keepalived/keepalived.conf << EOL
 vrrp_instance 172.16.240.10 {
