@@ -14,6 +14,8 @@ SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
 SingleLogoutService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://adfs.migrate.local/adfs/ls/"
 X509Certificate
 
+https://www.samltool.com/format_x509cert.php
+https://github.com/SAML-Toolkits/python3-saml/blob/master/demo-flask/saml/settings.json
 
 https://support.indeed-company.ru/Knowledgebase/Article/View/instrukciya-po-ustanovke-adfs-extension-dlya-ea-server-70
 
