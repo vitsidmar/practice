@@ -1,0 +1,48 @@
+#!/bin/bash -eu
+
+declare -r NOTETYPE="$1"
+declare -r VIP="$2"
+declare -r NEWSTATE="$3"
+
+declare -r PRIVATE_IP="$(ip -4 a s eth1 | awk '/inet/{x=$2}END{FS="/"; $0=x; print $1}')"
+
+
+to_syslog() {
+    logger -p local0.info -i -t "NAT-SWITCHER" "$@"
+}
+
+add_rule() {
+    /sbin/iptables -t nat -L -n | grep -q "to:$PRIVATE_IP" && {
+        return 0
+    }
+
+    /sbin/iptables -t nat \
+        -A PREROUTING \
+        -d "${VIP}/32" -i 'eth1' \
+        -j DNAT --to-destination "$PRIVATE_IP"
+}
+
+del_rule() {
+    while : ; do
+        /sbin/iptables -t nat \
+            -D PREROUTING \
+            -d "${VIP}/32" -i 'eth1' \
+            -j DNAT --to-destination "$PRIVATE_IP" \
+        || break
+    done
+}
+
+case "$NEWSTATE" in
+    MASTER|FAULT)
+        del_rule
+    ;;
+    BACKUP)
+        add_rule
+    ;;
+    *)
+        to_syslog "Error: unknown state: $NEWSTATE"
+        exit 1
+    ;;
+esac
+
+exit 0
