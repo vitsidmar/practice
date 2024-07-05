@@ -1,0 +1,7 @@
+for i in $(seq 10); do 
+  printf 'GET / HTTP/1.0\n\n\n' | nc 192.168.0.100 80 | grep Hello
+done
+
+ipvsadm -Ln
+
+ipvsadm -Lnc
