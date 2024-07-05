@@ -1,0 +1,6 @@
+apt install -y keepalived ipvsadm nginx
+cat>/etc/sysctl.d/local.conf EOF
+net.ipv4.ip_nonlocal_bind = 1
+net.ipv4.vs.drop_entry = 1
+net.nf_conntrack_max = 4194304
+EOF
