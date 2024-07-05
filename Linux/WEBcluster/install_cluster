@@ -1,6 +1,124 @@
 apt install -y keepalived ipvsadm nginx
-cat>/etc/sysctl.d/local.conf EOF
+
+cat > /etc/sysctl.d/local.conf << EOL
 net.ipv4.ip_nonlocal_bind = 1
 net.ipv4.vs.drop_entry = 1
 net.nf_conntrack_max = 4194304
-EOF
+EOL
+
+cat >> /etc/modules << EOL
+ip_vs conn_tab_bits=18
+EOL
+
+cat >> /etc/nginx/nginx.conf << EOL
+stream {
+    include /etc/nginx/stream-enabled/*;
+}
+EOL
+
+mkdir /etc/nginx/stream-enabled
+
+cat > /etc/nginx/sites-enabled/web_servers.conf << EOL
+upstream web_servers {
+    server 172.16.240.198:80;
+    server 172.16.240.199:80;
+}
+
+server {
+    listen 172.16.0.1:80 default_server;
+    listen 172.16.240.10:80 default_server;
+
+    location / {
+        proxy_set_header   Host $host;
+        proxy_set_header   X-Real-IP $remote_addr;
+        proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+
+        proxy_pass         http://web_servers;
+        proxy_redirect     default;
+    }
+}
+EOL
+
+cat > /etc/nginx/stream-enabled/dns_servers.conf << EOL
+upstream dns_servers {
+    server 172.16.240.21:53;
+    server 8.8.8.8:53;
+}
+
+server {
+    listen 172.16.0.1:53 udp reuseport;
+    listen 172.16.240.10:53 udp reuseport;
+
+    proxy_pass dns_servers;
+}
+EOL
+
+
+cat >> /etc/keepalived/keepalived.conf << EOL
+vrrp_instance 172.16.240.10 {
+    interface ens160         # Интерфейс на котором будет работать VRRP
+    track_interface {      # Если на одном из этих интерфейсов пропадет линк или
+        ens160               # он будет выключен, балансер перейдет в состояние
+                       # FAULT, т.е. с него будет удален виртуальный IP и
+                           # все настройки LVS
+    }
+    virtual_router_id 1    # Должен совпадать на обоих узлах
+    nopreempt              # Не менять роль текущего балансера на BACKUP
+                           # если в сети появился сосед с более высоким приоритетом
+    priority 102           # Приоритет. Может отличаться на разных узлах
+
+    authentication {
+        auth_type PASS
+        auth_pass secret   # Здесь нужно установить свой пароль
+    }
+    virtual_ipaddress {
+        172.16.240.10/24 dev ens160
+    }
+    notify /usr/local/bin/nat-switch
+}
+
+virtual_server 172.16.240.10 80 {
+    lb_algo wlc                     # Алгоритм балансировки
+                                    # wlc -- больше запросов к серверам с меньшим кол-вом
+                                    # активных соединений.
+    lb_kind DR                      # Режимы перенаправления запросов. Direct routing
+
+    protocol TCP
+    delay_loop 6                    # Интервал между запусками healthchecker'а
+    real_server 172.16.0.1 80 {
+        weight 1
+        TCP_CHECK {                 # Простая проверка доступности локального
+            connect_timeout 2       # и соседнего экземпляров Nginx
+        }
+    }
+    real_server 172.16.0.2 80 {
+        weight 1
+        TCP_CHECK {
+            connect_timeout 2
+        }
+    }
+}
+
+virtual_server 172.16.240.10 53 {
+    lb_algo wlc
+    lb_kind DR
+    protocol UDP
+    delay_loop 6
+    real_server 172.16.0.1 53 {
+        weight 1
+        MISC_CHECK {
+            connect_timeout 2
+            misc_path "/bin/nc -zn -u 172.16.0.1 53"
+        }
+    }
+    real_server 172.16.0.2 53 {
+        weight 1
+        MISC_CHECK {
+            connect_timeout 2
+            misc_path "/bin/nc -zn -u 172.16.0.2 53"
+        }
+    }
+}
+EOL
+
+
