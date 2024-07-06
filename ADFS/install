@@ -1,8 +1,8 @@
 install role ADFS
-# Configure ADFS
 # Create certificat
 New-SelfSignedCertificate -DnsName adfs.migrate.local -CertStoreLocation cert:\LocalMachine\My
 # open certlm.msc and export certificat *.pfx
+# Configure ADFS
 
 # check adfs
 https://adfs.migrate.local/adfs/fs/federationserverservice.asmx
