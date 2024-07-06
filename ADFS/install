@@ -1,5 +1,10 @@
 create certificat *.pfx
 install role ADFS
+# Configure ADFS
+# Create certificat
+New-SelfSignedCertificate -DnsName DC01-w22s.ss.net.ua -CertStoreLocation cert:\LocalMachine\My
+# open certlm.msc and export certificat
+
 # check adfs
 https://adfs.migrate.local/adfs/fs/federationserverservice.asmx
 or activiert
