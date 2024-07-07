@@ -5,8 +5,10 @@ apt update -y && apt upgrade -y
 apt install -y apache2 openssl
 domain="lamp.migrate.local"
 ssldir="/etc/apache2/ssl"
+sudo mkdir -p $ssldir
 sslfile="server"
 sitedir="/var/www/html/adfs"
+sudo mkdir -p $sitedir
 sites_available="adfs"
 
 cat > $ssldir/$sslfile.cnf << EOL
@@ -36,7 +38,6 @@ subjectAltName = @alt_names
 [ alt_names ]
 DNS.1   = $domain
 EOL
-sudo mkdir -p $ssldir
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $ssldir/$sslfile.key -out $ssldir/$sslfile.crt -config $ssldir/$sslfile.cnf
 
 cat > /etc/apache2/sites-available/$apachefile.conf << EOL
