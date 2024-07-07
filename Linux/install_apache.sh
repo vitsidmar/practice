@@ -36,6 +36,8 @@ cat > /etc/apache2/sites-available/$sites_available.conf << EOL
 </VirtualHost>
 EOL
 
+cat "/etc/apache2/sites-available/$sites_available.conf"
+
 cat > $ssldir/$sslfile.cnf << EOL
 [ req ]
 default_bits       = 2048
@@ -63,8 +65,10 @@ subjectAltName = @alt_names
 [ alt_names ]
 DNS.1   = $domain
 EOL
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $ssldir/$sslfile.key -out $ssldir/$sslfile.crt -config $ssldir/$sslfile.cnf
 
+cat "$ssldir/$sslfile.cnf"
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $ssldir/$sslfile.key -out $ssldir/$sslfile.crt -config $ssldir/$sslfile.cnf
+echo "openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $ssldir/$sslfile.key -out $ssldir/$sslfile.crt -config $ssldir/$sslfile.cnf"
 sudo a2enmod ssl
 sudo a2ensite $sites_available.conf
 sudo systemctl restart apache2
