@@ -25,8 +25,8 @@ cat > /etc/apache2/sites-available/$sites_available.conf << EOL
     CustomLog ${APACHE_LOG_DIR}/access.log combined
 
     SSLEngine on
-    SSLCertificateFile $ssldir/$crtname.crt
-    SSLCertificateKeyFile $ssldir/$crtname.key
+    SSLCertificateFile $ssldir/$sslfile.crt
+    SSLCertificateKeyFile $ssldir/$sslfile.key
 
     <Directory $sitedir>
         Options Indexes FollowSymLinks
