@@ -8,10 +8,37 @@ ssldir="/etc/apache2/ssl"
 sitedir="/var/www/html/adfs"
 sslfile="server"
 apachefile="adfs"
+c
+cat >> $ssldir/$sslfile.cnf << EOL
+[ req ]
+default_bits       = 2048
+default_keyfile    = $sslfile.key
+distinguished_name = req_distinguished_name
+req_extensions     = req_ext
+x509_extensions    = v3_ca # The extentions to add to the self signed cert
+prompt             = no
+
+[ req_distinguished_name ]
+countryName                = UA
+stateOrProvinceName        = Kyiv
+localityName               = Kyiv
+organizationName           = SS
+organizationalUnitName     =
+commonName                 = $domain
+emailAddress               =
+
+[ req_ext ]
+subjectAltName = @alt_names
+
+[ v3_ca ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1   = $domain
+EOL
 sudo mkdir -p $ssldir
-sudo openssl genpkey -algorithm RSA -out $ssldir/$sslfile.key -pkeyopt rsa_keygen_bits:2048
-sudo openssl req -new -key $ssldir/$sslfile.key -out $ssldir/$sslfile.csr
-sudo openssl x509 -req -days 365 -in $ssldir/$sslfile.csr -signkey $ssldir/$sslfile.key -out $ssldir/$sslfile.crt
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $ssldir/$sslfile.key -out $ssldir/$sslfile.crt -config $ssldir/$sslfile.cnf
+
 cat >> /etc/apache2/sites-available/$apachefile.conf << EOL
 <VirtualHost *:80>
     ServerName $domain
