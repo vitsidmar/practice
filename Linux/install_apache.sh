@@ -52,9 +52,9 @@ countryName                = UA
 stateOrProvinceName        = Kyiv
 localityName               = Kyiv
 organizationName           = SS
-organizationalUnitName     =
+organizationalUnitName     = IT
 commonName                 = $domain
-emailAddress               =
+emailAddress               = it@$domain
 
 [ req_ext ]
 subjectAltName = @alt_names
