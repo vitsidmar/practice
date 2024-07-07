@@ -1,16 +1,18 @@
 #!/bin/bash
 # curl -L https://github.com/vitsidmar/practice/raw/main/Linux/install_apache.sh -o install_apache.sh && chmod +x install_apache.sh && ./install_apache.sh
+
 sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 apt update -y && apt upgrade -y
 apt install -y apache2 openssl
+
 domain="lamp.migrate.local"
 ssldir="/etc/apache2/ssl"
-sudo mkdir -p $ssldir
 sslfile="server"
 sitedir="/var/www/html/adfs"
-sudo mkdir -p $sitedir
 sites_available="adfs"
 
+sudo mkdir -p $ssldir
+sudo mkdir -p $sitedir
 cat > /etc/apache2/sites-available/$sites_available.conf << EOL
 <VirtualHost *:80>
     ServerName $domain
