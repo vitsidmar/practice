@@ -1,6 +1,6 @@
 #!/bin/bash
-
-
+# 
+sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 apt update -y && apt upgrade -y
 apt install apache2 openssl
 domain="lamp.migrate.local"
