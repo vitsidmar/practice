@@ -9,7 +9,7 @@ sslfile="server"
 sitedir="/var/www/html/adfs"
 sites_available="adfs"
 
-cat >> $ssldir/$sslfile.cnf << EOL
+cat > $ssldir/$sslfile.cnf << EOL
 [ req ]
 default_bits       = 2048
 default_keyfile    = $sslfile.key
@@ -39,7 +39,7 @@ EOL
 sudo mkdir -p $ssldir
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $ssldir/$sslfile.key -out $ssldir/$sslfile.crt -config $ssldir/$sslfile.cnf
 
-cat >> /etc/apache2/sites-available/$apachefile.conf << EOL
+cat > /etc/apache2/sites-available/$apachefile.conf << EOL
 <VirtualHost *:80>
     ServerName $domain
     Redirect permanent / https://$domain/
