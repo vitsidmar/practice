@@ -5,10 +5,10 @@ apt update -y && apt upgrade -y
 apt install apache2 openssl
 domain="lamp.migrate.local"
 ssldir="/etc/apache2/ssl"
-sitedir="/var/www/html/adfs"
 sslfile="server"
-apachefile="adfs"
-c
+sitedir="/var/www/html/adfs"
+sites_available="adfs"
+
 cat >> $ssldir/$sslfile.cnf << EOL
 [ req ]
 default_bits       = 2048
@@ -64,5 +64,5 @@ cat >> /etc/apache2/sites-available/$apachefile.conf << EOL
 </VirtualHost>
 EOL
 sudo a2enmod ssl
-sudo a2ensite $apachefile.conf
+sudo a2ensite $sites_available.conf
 sudo systemctl restart apache2
