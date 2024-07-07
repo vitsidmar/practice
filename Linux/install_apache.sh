@@ -2,7 +2,7 @@
 # curl -L https://github.com/vitsidmar/practice/raw/main/Linux/install_apache.sh -o install_apache.sh && chmod +x install_apache.sh && ./install_apache.sh
 sed -i "/#\$nrconf{restart} = 'i';/s/.*/\$nrconf{restart} = 'a';/" /etc/needrestart/needrestart.conf
 apt update -y && apt upgrade -y
-apt install apache2 openssl
+apt install -y apache2 openssl
 domain="lamp.migrate.local"
 ssldir="/etc/apache2/ssl"
 sslfile="server"
