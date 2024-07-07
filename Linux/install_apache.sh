@@ -11,6 +11,31 @@ sitedir="/var/www/html/adfs"
 sudo mkdir -p $sitedir
 sites_available="adfs"
 
+cat > /etc/apache2/sites-available/$sites_available.conf << EOL
+<VirtualHost *:80>
+    ServerName $domain
+    Redirect permanent / https://$domain/
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName $domain
+
+    DocumentRoot $sitedir
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+    SSLEngine on
+    SSLCertificateFile $ssldir/$crtname.crt
+    SSLCertificateKeyFile $ssldir/$crtname.key
+
+    <Directory $sitedir>
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+</VirtualHost>
+EOL
+
 cat > $ssldir/$sslfile.cnf << EOL
 [ req ]
 default_bits       = 2048
@@ -40,30 +65,6 @@ DNS.1   = $domain
 EOL
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout $ssldir/$sslfile.key -out $ssldir/$sslfile.crt -config $ssldir/$sslfile.cnf
 
-cat > /etc/apache2/sites-available/$apachefile.conf << EOL
-<VirtualHost *:80>
-    ServerName $domain
-    Redirect permanent / https://$domain/
-</VirtualHost>
-
-<VirtualHost *:443>
-    ServerName $domain
-
-    DocumentRoot $sitedir
-    ErrorLog ${APACHE_LOG_DIR}/error.log
-    CustomLog ${APACHE_LOG_DIR}/access.log combined
-
-    SSLEngine on
-    SSLCertificateFile $ssldir/$crtname.crt
-    SSLCertificateKeyFile $ssldir/$crtname.key
-
-    <Directory $sitedir>
-        Options Indexes FollowSymLinks
-        AllowOverride All
-        Require all granted
-    </Directory>
-</VirtualHost>
-EOL
 sudo a2enmod ssl
 sudo a2ensite $sites_available.conf
 sudo systemctl restart apache2
