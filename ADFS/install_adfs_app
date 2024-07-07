@@ -1,2 +1,5 @@
 # Install apache
 curl -L https://github.com/vitsidmar/practice/raw/main/Linux/install_apache.sh -o install_apache.sh && chmod +x install_apache.sh && ./install_apache.sh
+git clone https://github.com/SAML-Toolkits/python3-saml.git /tmp/python3-saml
+cp -r /tmp/python3-saml/demo-flask/* /var/www/html/adfs/
+rm -rf /tmp/python3-saml
