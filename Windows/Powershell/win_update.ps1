@@ -1,5 +1,6 @@
+# powershell -ExecutionPolicy Bypass -File C:\Windows\System32\win_update.ps1
 $taskName = "UpdateWindowsTask"
-$scriptPath = "C:\Windows\System32\auto_update.ps1"
+$scriptPath = "C:\Windows\System32\win_update.ps1"
 $taskAction = New-ScheduledTaskAction -Execute "Powershell.exe" -Argument "-ExecutionPolicy Bypass -File $scriptPath"
 $taskTrigger = New-ScheduledTaskTrigger -AtStartup
 $taskPrincipal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
