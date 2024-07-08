@@ -1,4 +1,5 @@
 #!/bin/bash
+# curl -L https://github.com/vitsidmar/practice/raw/main/Linux/update_samlconfig.sh -o update_samlconfig.sh && chmod +x update_samlconfig.sh && ./update_samlconfig.sh
 
 OUTPUT_DIR="/root/adfs/"
 METADATA_FILE="$OUTPUT_DIR/federationmetadata.xml"
