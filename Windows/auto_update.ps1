@@ -1,3 +1,16 @@
+$taskName = "UpdateWindowsTask"
+$scriptPath = "C:\auto_update.ps1"
+$taskAction = New-ScheduledTaskAction -Execute "Powershell.exe" -Argument "-ExecutionPolicy Bypass -File $scriptPath"
+$taskTrigger = New-ScheduledTaskTrigger -AtStartup
+$taskPrincipal = New-ScheduledTaskPrincipal -UserId "SYSTEM" -LogonType ServiceAccount -RunLevel Highest
+
+try {
+    Register-ScheduledTask -TaskName $taskName -Action $taskAction -Trigger $taskTrigger -Principal $taskPrincipal -Force
+    Write-Host "Task '$taskName' has been created and will run at system startup."
+} catch {
+    Write-Host "Error creating task: $_"
+}
+
 Write-Host "Installing PSWindowsUpdate module..."
 try {
     Install-Module -Name PSWindowsUpdate -Force -AllowClobber -ErrorAction Stop
@@ -31,7 +44,6 @@ try {
     if ($updates.Count -eq 0) {
         Write-Host "No updates available."
             
-        $taskName = "UpdateTask"
         try {
             Unregister-ScheduledTask -TaskName $taskName -Confirm:$false -ErrorAction Stop
             Write-Host "Scheduled task '$taskName' has been removed."
@@ -39,7 +51,6 @@ try {
             Write-Host "Failed to remove scheduled task: $_"
         }
 
-        $scriptPath = "C:\auto_update.ps1" # Замініть на реальний шлях до вашого файлу скрипта
         try {
             Remove-Item -Path $scriptPath -ErrorAction Stop
             Write-Host "Script file removed successfully."
