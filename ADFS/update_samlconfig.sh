@@ -9,7 +9,7 @@ SP_DOMAIN=$(hostname)
 IDP_DOMAIN="adfs.migrate.local"
 METADATA_FILE="$OUTPUT_DIR/federationmetadata.xml"
 SETTINGS_FILE="$OUTPUT_DIR/saml/settings.json"
-
+CERT_INFO="/C=CH/ST=Zurich/L=Monchaltorf/O=Sidmar/OU=IT/CN=IT@$SP_DOMAIN"
 
 curl -k -o $OUTPUT_DIR/federationmetadata.xml https://$IDP_DOMAIN/FederationMetadata/2007-06/federationmetadata.xml
 git clone https://github.com/SAML-Toolkits/python3-saml.git /tmp/python3-saml
@@ -25,10 +25,12 @@ x509cert=$(xmlstarlet sel -N md=$namespace -N ds=$ds -t -v "//md:KeyDescriptor[@
 
 mkdir -p "$OUTPUT_DIR/saml/certs"
 openssl genpkey -algorithm RSA -out "$OUTPUT_DIR/saml/certs/private.key" -pkeyopt rsa_keygen_bits:2048
-openssl req -new -key "$OUTPUT_DIR/saml/certs/private.key" -out "$OUTPUT_DIR/saml/certs/cert.csr" -subj "/C=CH/ST=Zurich/L=Monchaltorf/O=Sidmar/OU=IT/CN=IT@$SP_DOMAIN"
+openssl req -new -key "$OUTPUT_DIR/saml/certs/private.key" -out "$OUTPUT_DIR/saml/certs/cert.csr" -subj $CERT_INFO
 openssl x509 -req -days 365 -in "$OUTPUT_DIR/saml/certs/cert.csr" -signkey "$OUTPUT_DIR/saml/certs/private.key" -out "$OUTPUT_DIR/saml/certs/public.crt"
-saml_cert=$(cat "$OUTPUT_DIR/saml/certs/public.crt")
-private_key=$(cat "$OUTPUT_DIR/saml/certs/private.key")
+
+saml_cert=$(sed '/-----BEGIN CERTIFICATE-----/d; /-----END CERTIFICATE-----/d' "$OUTPUT_DIR/saml/certs/public.crt" | tr -d '\n')
+private_key=$(sed '/-----BEGIN PRIVATE KEY-----/d; /-----END PRIVATE KEY-----/d' "$OUTPUT_DIR/saml/certs/private.key" | tr -d '\n')
+
 
 echo "Extracted values:"
 echo "entityId: $entityId"
