@@ -1,5 +1,7 @@
 # Install apache
-curl -L https://github.com/vitsidmar/practice/raw/main/Linux/install_apache.sh -o install_apache.sh && chmod +x install_apache.sh && ./install_apache.sh
-git clone https://github.com/SAML-Toolkits/python3-saml.git /tmp/python3-saml
-cp -r /tmp/python3-saml/demo-flask/* /var/www/html/adfs/
-rm -rf /tmp/python3-saml
+sudo apt update
+sudo apt install python3 python3-venv python3-pip apache2 libapache2-mod-wsgi-py3
+cd /var/www/html/adfs
+python3 -m venv venv
+source venv/bin/activate
+pip install flask flask-saml requests
