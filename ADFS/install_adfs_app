@@ -4,5 +4,5 @@ sudo apt install python3 python3-venv python3-pip apache2 libapache2-mod-wsgi-py
 cd /var/www/html/adfs
 python3 -m venv venv
 source venv/bin/activate
-pip install flask flask-saml requests python3-saml isodate lxml xmlsec
+pip install Flask onelogin.saml2 requests python3-saml isodate lxml xmlsec
 pip install --force-reinstall --no-binary lxml lxml
