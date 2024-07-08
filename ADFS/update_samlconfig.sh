@@ -4,7 +4,7 @@
 sudo apt-get update -y
 sudo apt-get install -y libxml2-utils jq
 
-OUTPUT_DIR="/root/adfs/"
+OUTPUT_DIR="/root/adfs"
 METADATA_FILE="$OUTPUT_DIR/federationmetadata.xml"
 SETTINGS_FILE="$OUTPUT_DIR/settings.json"
 SP_DOMAIN=$(hostname)
