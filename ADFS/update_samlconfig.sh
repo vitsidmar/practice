@@ -6,7 +6,7 @@ sudo apt-get install -y libxml2-utils jq
 
 OUTPUT_DIR="/root/adfs"
 METADATA_FILE="$OUTPUT_DIR/federationmetadata.xml"
-SETTINGS_FILE="$OUTPUT_DIR/settings.json"
+SETTINGS_FILE="$OUTPUT_DIR/saml/settings.json"
 SP_DOMAIN=$(hostname)
 
 curl -k -o $OUTPUT_DIR/federationmetadata.xml https://adfs.migrate.local/FederationMetadata/2007-06/federationmetadata.xml
