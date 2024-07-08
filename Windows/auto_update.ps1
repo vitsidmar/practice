@@ -39,7 +39,7 @@ try {
             Write-Host "Failed to remove scheduled task: $_"
         }
 
-        $scriptPath = "C:\Path\To\Your\Script.ps1" # Замініть на реальний шлях до вашого файлу скрипта
+        $scriptPath = "C:\auto_update.ps1" # Замініть на реальний шлях до вашого файлу скрипта
         try {
             Remove-Item -Path $scriptPath -ErrorAction Stop
             Write-Host "Script file removed successfully."
