@@ -1,14 +1,21 @@
 #!/bin/bash
 
-OUTPUT_DIR="/root/adfs/saml"
+OUTPUT_DIR="/root/adfs/"
 METADATA_FILE="$OUTPUT_DIR/federationmetadata.xml"
 SETTINGS_FILE="$OUTPUT_DIR/settings.json"
 SP_DOMAIN=$(hostname)
 
+curl -k -o $OUTPUT_DIR/federationmetadata.xml https://adfs.migrate.local/FederationMetadata/2007-06/federationmetadata.xml
+git clone https://github.com/SAML-Toolkits/python3-saml.git /tmp/python3-saml
+cp -r /tmp/python3-saml/demo-flask/* $OUTPUT_DIR
+rm -rf /tmp/python3-saml
+
+namespace="urn:oasis:names:tc:SAML:2.0:metadata"
+ds="http://www.w3.org/2000/09/xmldsig#"
 entityId=$(xmlstarlet sel -N md=$namespace -t -v "//md:EntityDescriptor/@entityID" "$METADATA_FILE")
 ssoUrl=$(xmlstarlet sel -N md=$namespace -t -v "//md:IDPSSODescriptor/md:SingleSignOnService[@Binding='urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect']/@Location" "$METADATA_FILE")
 sloUrl=$(xmlstarlet sel -N md=$namespace -t -v "//md:IDPSSODescriptor/md:SingleLogoutService[@Binding='urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect']/@Location" "$METADATA_FILE")
-x509cert=$(xmlstarlet sel -N md="urn:oasis:names:tc:SAML:2.0:metadata" -N ds="http://www.w3.org/2000/09/xmldsig#" -t -v "//md:KeyDescriptor[@use='signing']/ds:KeyInfo/ds:X509Data/ds:X509Certificate" "$METADATA_FILE" | head -n 1)
+x509cert=$(xmlstarlet sel -N md=$namespace -N ds=$ds -t -v "//md:KeyDescriptor[@use='signing']/ds:KeyInfo/ds:X509Data/ds:X509Certificate" "$METADATA_FILE" | head -n 1)
 
 mkdir -p "$OUTPUT_DIR/certs"
 openssl genpkey -algorithm RSA -out "$OUTPUT_DIR/certs/private.key" -pkeyopt rsa_keygen_bits:2048
