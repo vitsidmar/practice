@@ -5,10 +5,11 @@ sudo apt-get update -y
 sudo apt-get install -y libxml2-utils jq xmlstarlet
 
 OUTPUT_DIR="/root/adfs"
-METADATA_FILE="$OUTPUT_DIR/federationmetadata.xml"
-SETTINGS_FILE="$OUTPUT_DIR/saml/settings.json"
 SP_DOMAIN=$(hostname)
 IDP_DOMAIN="adfs.migrate.local"
+METADATA_FILE="$OUTPUT_DIR/federationmetadata.xml"
+SETTINGS_FILE="$OUTPUT_DIR/saml/settings.json"
+
 
 curl -k -o $OUTPUT_DIR/federationmetadata.xml https://$IDP_DOMAIN/FederationMetadata/2007-06/federationmetadata.xml
 git clone https://github.com/SAML-Toolkits/python3-saml.git /tmp/python3-saml
