@@ -8,8 +8,9 @@ OUTPUT_DIR="/root/adfs"
 METADATA_FILE="$OUTPUT_DIR/federationmetadata.xml"
 SETTINGS_FILE="$OUTPUT_DIR/saml/settings.json"
 SP_DOMAIN=$(hostname)
+IDP_DOMAIN="adfs.migrate.local"
 
-curl -k -o $OUTPUT_DIR/federationmetadata.xml https://adfs.migrate.local/FederationMetadata/2007-06/federationmetadata.xml
+curl -k -o $OUTPUT_DIR/federationmetadata.xml https://$IDP_DOMAIN/FederationMetadata/2007-06/federationmetadata.xml
 git clone https://github.com/SAML-Toolkits/python3-saml.git /tmp/python3-saml
 cp -r /tmp/python3-saml/demo-flask/* $OUTPUT_DIR
 rm -rf /tmp/python3-saml
