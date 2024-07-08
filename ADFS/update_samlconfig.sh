@@ -21,12 +21,12 @@ ssoUrl=$(xmlstarlet sel -N md=$namespace -t -v "//md:IDPSSODescriptor/md:SingleS
 sloUrl=$(xmlstarlet sel -N md=$namespace -t -v "//md:IDPSSODescriptor/md:SingleLogoutService[@Binding='urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect']/@Location" "$METADATA_FILE")
 x509cert=$(xmlstarlet sel -N md=$namespace -N ds=$ds -t -v "//md:KeyDescriptor[@use='signing']/ds:KeyInfo/ds:X509Data/ds:X509Certificate" "$METADATA_FILE" | head -n 1)
 
-mkdir -p "$OUTPUT_DIR/certs"
-openssl genpkey -algorithm RSA -out "$OUTPUT_DIR/certs/private.key" -pkeyopt rsa_keygen_bits:2048
-openssl req -new -key "$OUTPUT_DIR/certs/private.key" -out "$OUTPUT_DIR/certs/cert.csr" -subj "/C=UA/ST=Kyiv/L=Kyiv/O=MyCompany/OU=MyUnit/CN=$SP_DOMAIN"
-openssl x509 -req -days 365 -in "$OUTPUT_DIR/certs/cert.csr" -signkey "$OUTPUT_DIR/certs/private.key" -out "$OUTPUT_DIR/certs/public.crt"
-saml_cert=$(cat "$OUTPUT_DIR/certs/public.crt")
-private_key=$(cat "$OUTPUT_DIR/certs/private.key")
+mkdir -p "$OUTPUT_DIR/saml/certs"
+openssl genpkey -algorithm RSA -out "$OUTPUT_DIR/saml/certs/private.key" -pkeyopt rsa_keygen_bits:2048
+openssl req -new -key "$OUTPUT_DIR/saml/certs/private.key" -out "$OUTPUT_DIR/saml/certs/cert.csr" -subj "/C=UA/ST=Kyiv/L=Kyiv/O=MyCompany/OU=MyUnit/CN=$SP_DOMAIN"
+openssl x509 -req -days 365 -in "$OUTPUT_DIR/saml/certs/cert.csr" -signkey "$OUTPUT_DIR/saml/certs/private.key" -out "$OUTPUT_DIR/saml/certs/public.crt"
+saml_cert=$(cat "$OUTPUT_DIR/saml/certs/public.crt")
+private_key=$(cat "$OUTPUT_DIR/saml/certs/private.key")
 
 echo "Extracted values:"
 echo "entityId: $entityId"
@@ -48,7 +48,7 @@ jq --arg sp_entityId "https://$SP_DOMAIN/metadata/" \
    --arg slo_url "$sloUrl" \
    --arg idp_x509cert "$x509cert" \
    '.sp.entityId = $sp_entityId | .sp.assertionConsumerService.url = $acs_url | .sp.singleLogoutService.url = $slo_url_sp | .sp.NameIDFormat = $nameIdFormat | .sp.x509cert = $sp_x509cert | .sp.privateKey = $sp_privateKey | .idp.entityId = $idp_entityId | .idp.singleSignOnService.url = $sso_url | .idp.singleLogoutService.url = $slo_url | .idp.x509cert = $idp_x509cert' \
-   "$SETTINGS_FILE" > "$OUTPUT_DIR/settings.json"
+   "$SETTINGS_FILE" > "$OUTPUT_DIR/saml/settings.json"
 
 echo "Updated settings.json:"
 
