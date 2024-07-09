@@ -1,2 +1,21 @@
+
+
+/etc/sysctl.d/local.conf
+net.ipv4.ip_nonlocal_bind = 1
+net.ipv4.vs.drop_entry = 1
+net.nf_conntrack_max = 4194304
+
+/etc/modules
+ip_vs conn_tab_bits=18
+
+/etc/nginx/nginx.conf
+stream {
+    include /etc/nginx/stream-enabled/*;
+}
+
+mkdir /etc/nginx/stream-enabled
+
+/etc/nginx/sites-enabled/web_servers.conf
+
 https://habr.com/ru/companies/netangels/articles/326400/
 https://accelazh.github.io/loadbalance/HA-Of-Haproxy-Using-Keepalived-VRRP
