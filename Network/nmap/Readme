@@ -1,1 +1,5 @@
+https://nmap.org/dist/nmap-7.95-setup.exe
+https://nmap.org/dist/nmap-7.95-1.src.rpm
+https://nmap.org/dist/nmap-7.95.dmg
+https://github.com/nmap/nmap
 nmap [ <Scan Type> ...] [ <Options> ] { <target specification> }
