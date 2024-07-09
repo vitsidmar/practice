@@ -1,0 +1,73 @@
+# LAMP 172.16.240.198
+[mysqld]
+server-id = 1
+# master
+log-bin = /var/lib/mysql/mysql-bin
+# slave
+relay-log = /var/lib/mysql/mysql-relay-bin
+relay-log-index = /var/lib/mysql/mysql-relay-bin.index
+replicate-do-db = test_db
+master-host=172.16.240.199
+master-user=replication
+master-password=passw0rd
+master-port=3306
+
+mysql@lamp> GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'replication'@'172.16.240.199' IDENTIFIED BY 'passw0rd';
+
+mysql@lamp> SET GLOBAL read_only = OFF;
+mysql@lamp> show master status;
+
++------------------+----------+--------------+------------------+
+| File | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++------------------+----------+--------------+------------------+
+| mysql-bin.000006 | 7984 | | | 
++------------------+----------+--------------+------------------+
+1 row in set (0,00 sec)
+
+# 
+mysql@lamp02> slave stop; # на всякий случай
+mysql@lamp02> CHANGE MASTER TO MASTER_HOST = "172.16.240.199", MASTER_USER = "replication", MASTER_PASSWORD = "passw0rd", MASTER_LOG_FILE = "mysql-bin.000006", MASTER_LOG_POS = 7984;
+mysql@lamp02> slave start;
+# test
+mysql@lamp02>load data from master;
+# oder
+mysql@lamp02> show slave status;
+
+
+
+
+# LAMP02 172.16.240.199
+[mysqld]
+server-id = 2
+# master
+log-bin = /var/lib/mysql/mysql-bin
+# slave
+relay-log = /var/lib/mysql/mysql-relay-bin
+relay-log-index = /var/lib/mysql/mysql-relay-bin.index
+replicate-do-db = test_db
+master-host=172.16.240.198
+master-user=replication
+master-password=passw0rd
+master-port=3306
+
+
+mysql@lamp02> GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'replication'@'172.16.240.198' IDENTIFIED BY 'passw0rd';
+
+mysql@lamp02> SET GLOBAL read_only = OFF;
+mysql@lamp02> show master status;
+
++------------------+----------+--------------+------------------+
+| File | Position | Binlog_Do_DB | Binlog_Ignore_DB |
++------------------+----------+--------------+------------------+
+| mysql-bin.000006 | 7984 | | | 
++------------------+----------+--------------+------------------+
+1 row in set (0,00 sec)
+
+# connect master
+mysql@lamp> slave stop; # на всякий случай
+mysql@lamp> CHANGE MASTER TO MASTER_HOST = "172.16.240.199", MASTER_USER = "replication", MASTER_PASSWORD = "passw0rd", MASTER_LOG_FILE = "mysql-bin.000006", MASTER_LOG_POS = 7984;
+mysql@lamp> slave start;
+# test
+mysql@lamp>load data from master;
+# oder
+mysql@lamp> show slave status;
