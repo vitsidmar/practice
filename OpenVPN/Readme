@@ -1,0 +1,11 @@
+Konfigurierte OpenVPN mit dem Skript
+curl -fL -o openvpn.sh https://github.com/hwdsl2/openvpn-install/raw/master/openvpn-install.sh
+chmod +x openvpn.sh
+sudo bash openvpn.sh --auto
+Client Configuration datei client.ovpn 
+Einrichten VPN-Benutzerkonto sudo bash openvpn.sh --addclient [client name]
+
+Client linux
+OpenVPN installieren  sudo apt update && sudo apt install openvpn -y 
+Kopieren Sie die Daten der Datei client.ovpn in die Datei /etc/openvpn/client.conf 
+VPN-verbinden sudo openvpn --config /etc/openvpn/client.conf 
