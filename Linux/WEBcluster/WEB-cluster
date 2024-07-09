@@ -15,7 +15,24 @@ stream {
 
 mkdir /etc/nginx/stream-enabled
 
+/etc/nginx/stream-enabled/dns_servers.conf
+upstream dns_servers {
+    server 192.168.0.201:53;
+    server 192.168.0.202:53;
+}
+
+server {
+    listen 172.16.0.1:53 udp reuseport;      # На втором балансере -- 172.16.0.2
+    listen 192.168.0.100:53 udp reuseport;
+
+    proxy_pass dns_servers;
+}
+
 /etc/nginx/sites-enabled/web_servers.conf
+
+
+/etc/keepalived/keepalived.conf
+
 
 https://habr.com/ru/companies/netangels/articles/326400/
 https://accelazh.github.io/loadbalance/HA-Of-Haproxy-Using-Keepalived-VRRP
