@@ -1,4 +1,4 @@
-# LAMP 172.16.240.198
+# LAMP 172.16.240.199
 [mysqld]
 server-id = 1
 # master
@@ -7,7 +7,7 @@ log-bin = /var/lib/mysql/mysql-bin
 relay-log = /var/lib/mysql/mysql-relay-bin
 relay-log-index = /var/lib/mysql/mysql-relay-bin.index
 replicate-do-db = test_db
-master-host=172.16.240.199
+master-host=172.16.240.198
 master-user=replication
 master-password=passw0rd
 master-port=3306
@@ -36,7 +36,7 @@ mysql@lamp02> show slave status;
 
 
 
-# LAMP02 172.16.240.199
+# LAMP02 172.16.240.198
 [mysqld]
 server-id = 2
 # master
@@ -45,7 +45,7 @@ log-bin = /var/lib/mysql/mysql-bin
 relay-log = /var/lib/mysql/mysql-relay-bin
 relay-log-index = /var/lib/mysql/mysql-relay-bin.index
 replicate-do-db = test_db
-master-host=172.16.240.198
+master-host=172.16.240.199
 master-user=replication
 master-password=passw0rd
 master-port=3306
