@@ -1,3 +1,5 @@
+# https://habr.com/ru/articles/87394/
+
 # LAMP 172.16.240.199
 [mysqld]
 server-id = 1
