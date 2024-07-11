@@ -1,75 +1,62 @@
 # https://habr.com/ru/articles/87394/
 
-# LAMP 172.16.240.199
-[mysqld]
+vim /etc/mysql/mysql.conf.d/mysqld.cnf
+
+bind-address = 0.0.0.0
 server-id = 1
-# master
-log-bin = /var/lib/mysql/mysql-bin
-# slave
-relay-log = /var/lib/mysql/mysql-relay-bin
-relay-log-index = /var/lib/mysql/mysql-relay-bin.index
-replicate-do-db = test_db
-master-host=172.16.240.198
-master-user=replication
-master-password=passw0rd
-master-port=3306
+log_bin = /var/log/mysql/mysql-bin.log
+binlog_expire_logs_seconds = 2592000
+max_binlog_size = 100M
+binlog_do_db = komments
+binlog_ignore_db = mysql
 
-mysql@lamp> GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'replication'@'172.16.240.199' IDENTIFIED BY 'passw0rd';
+sudo systemctl restart mysql
 
-mysql@lamp> SET GLOBAL read_only = OFF;
-mysql@lamp> show master status;
+CREATE USER 'replicator'@'%' IDENTIFIED BY 'replicator_password';
+GRANT REPLICATION SLAVE ON *.* TO 'replicator'@'%';
+FLUSH PRIVILEGES;
+FLUSH TABLES WITH READ LOCK;
+SHOW MASTER STATUS;
 
-+------------------+----------+--------------+------------------+
-| File | Position | Binlog_Do_DB | Binlog_Ignore_DB |
-+------------------+----------+--------------+------------------+
-| mysql-bin.000006 | 7984 | | | 
-+------------------+----------+--------------+------------------+
-1 row in set (0,00 sec)
+CHANGE MASTER TO
+MASTER_HOST='172.16.240.12',
+MASTER_USER='replicator',
+MASTER_PASSWORD='replicator_password',
+MASTER_LOG_FILE='mysql-bin.000001', -- Замість mysql-bin.000001 використайте значення з LAMP02
+MASTER_LOG_POS=position; -- Замість position використайте значення з LAMP02
 
-# 
-mysql@lamp02> slave stop; # на всякий случай
-mysql@lamp02> CHANGE MASTER TO MASTER_HOST = "172.16.240.199", MASTER_USER = "replication", MASTER_PASSWORD = "passw0rd", MASTER_LOG_FILE = "mysql-bin.000006", MASTER_LOG_POS = 7984;
-mysql@lamp02> slave start;
-# test
-mysql@lamp02>load data from master;
-# oder
-mysql@lamp02> show slave status;
+START SLAVE;
+SHOW SLAVE STATUS\G;
 
 
+UNLOCK TABLES;
 
 
-# LAMP02 172.16.240.198
-[mysqld]
-server-id = 2
-# master
-log-bin = /var/lib/mysql/mysql-bin
-# slave
-relay-log = /var/lib/mysql/mysql-relay-bin
-relay-log-index = /var/lib/mysql/mysql-relay-bin.index
-replicate-do-db = test_db
-master-host=172.16.240.199
-master-user=replication
-master-password=passw0rd
-master-port=3306
+# Create user on 172.16.240.11
+CREATE USER 'replication'@'172.16.240.12' IDENTIFIED WITH 'mysql_native_password' BY 'passw0rd';
+GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'replication'@'172.16.240.12';
+FLUSH PRIVILEGES;
+# Create user on 172.16.240.12
+CREATE USER 'replication'@'172.16.240.11' IDENTIFIED WITH 'mysql_native_password' BY 'passw0rd';
+GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'replication'@'172.16.240.11';
+FLUSH PRIVILEGES;
+# get MASTER_LOG_FILE and MASTER_LOG_POS
+SHOW MASTER STATUS;
+# Configure replication on 172.16.240.11
+STOP SLAVE;
+CHANGE MASTER TO MASTER_HOST='172.16.240.12', MASTER_USER='replication', MASTER_PASSWORD='passw0rd', MASTER_LOG_FILE='mysql-bin.000009', MASTER_LOG_POS=157;
+START SLAVE;
+# Configure replication on 172.16.240.12
+STOP SLAVE;
+CHANGE MASTER TO MASTER_HOST='172.16.240.11', MASTER_USER='replication', MASTER_PASSWORD='passw0rd', MASTER_LOG_FILE='mysql-bin.000009', MASTER_LOG_POS=157;
+START SLAVE;
+# check replication
+SHOW SLAVE STATUS\G;
+# check logs
+sudo tail -f /var/log/mysql/error.log
 
+DROP USER IF EXISTS 'replication'@'172.16.240.12';
+DROP USER IF EXISTS 'replication'@'172.16.240.11';
+STOP SLAVE;
+RESET SLAVE ALL;
 
-mysql@lamp02> GRANT REPLICATION SLAVE, REPLICATION CLIENT ON *.* TO 'replication'@'172.16.240.198' IDENTIFIED BY 'passw0rd';
-
-mysql@lamp02> SET GLOBAL read_only = OFF;
-mysql@lamp02> show master status;
-
-+------------------+----------+--------------+------------------+
-| File | Position | Binlog_Do_DB | Binlog_Ignore_DB |
-+------------------+----------+--------------+------------------+
-| mysql-bin.000006 | 7984 | | | 
-+------------------+----------+--------------+------------------+
-1 row in set (0,00 sec)
-
-# connect master
-mysql@lamp> slave stop; # на всякий случай
-mysql@lamp> CHANGE MASTER TO MASTER_HOST = "172.16.240.199", MASTER_USER = "replication", MASTER_PASSWORD = "passw0rd", MASTER_LOG_FILE = "mysql-bin.000006", MASTER_LOG_POS = 7984;
-mysql@lamp> slave start;
-# test
-mysql@lamp>load data from master;
-# oder
-mysql@lamp> show slave status;
