@@ -1,13 +1,19 @@
 #!/bin/bash
-# Create root mysql user 
-# CREATE USER '$root_login'@'%' IDENTIFIED BY '$root_pass';
-# GRANT ALL PRIVILEGES ON *.* TO '$root_login'@'%' WITH GRANT OPTION;
 
 REMOTE_HOST='172.16.240.12'
 root_login='rootuser'
 root_pass='password'
 cluster_login='replicator'
 cluster_pass='replicator_password'
+
+# Create root mysql user 
+CREATE USER '$root_login'@'%' IDENTIFIED BY '$root_pass';
+GRANT ALL PRIVILEGES ON *.* TO '$root_login'@'%' WITH GRANT OPTION;
+# Create replication user
+CREATE USER '$cluster_login'@'%' IDENTIFIED WITH mysql_native_password BY '$cluster_pass';
+GRANT REPLICATION SLAVE ON *.* TO '$cluster_login'@'%';
+FLUSH PRIVILEGES;
+FLUSH TABLES WITH READ LOCK;
 
 REMOTE_FILE=`mysql --host=$REMOTE_HOST --user=$LOGIN --password=$PASS -e "show master status \G" | grep "File" | awk '{print $2}'`
 REMOTE_POS=`mysql --host=$REMOTE_HOST --user=$LOGIN --password=$PASS -e "show master status \G" | grep "Position" | awk '{print $2}'`
