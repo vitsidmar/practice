@@ -1,19 +1,40 @@
 #!/bin/bash
+# Create root mysql user 
+#CREATE USER 'rootuser'@'%' IDENTIFIED BY 'password';
+#GRANT ALL PRIVILEGES ON *.* TO 'rootuser'@'%' WITH GRANT OPTION;
 
 REMOTE_HOST='172.16.240.12'
 root_login='rootuser'
 root_pass='password'
 cluster_login='replicator'
 cluster_pass='replicator_password'
+config_file="/etc/mysql/mysql.conf.d/mysqld.cnf"
+database="komments"
 
-# Create root mysql user 
-CREATE USER '$root_login'@'%' IDENTIFIED BY '$root_pass';
-GRANT ALL PRIVILEGES ON *.* TO '$root_login'@'%' WITH GRANT OPTION;
+sudo sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' "$config_file"
+sudo sed -i 's/^\(max_binlog_size.*\)$/#\1/' "$config_file"
+
+cat <<EOL | sudo tee -a "$config_file"
+server-id = 1 #serv02 server-id = 2
+log_bin = /var/log/mysql/mysql-bin.log
+binlog_expire_logs_seconds = 2592000
+max_binlog_size = 100M
+auto_increment_increment= 2
+auto_increment_offset = 1 #serv02 auto_increment_offset = 2
+binlog_do_db = $database
+binlog-ignore-db = mysql
+binlog-ignore-db = Syslog
+binlog-ignore-db = performance_schema
+binlog-ignore-db = information_schema
+EOL
+
+sudo systemctl restart mysql
+
 # Create replication user
-CREATE USER '$cluster_login'@'%' IDENTIFIED WITH mysql_native_password BY '$cluster_pass';
-GRANT REPLICATION SLAVE ON *.* TO '$cluster_login'@'%';
-FLUSH PRIVILEGES;
-FLUSH TABLES WITH READ LOCK;
+mysql --user=$root_login --password=$root_pass -e "CREATE USER '$cluster_login'@'%' IDENTIFIED WITH mysql_native_password BY '$cluster_pass';"
+mysql --user=$root_login --password=$root_pass -e "GRANT REPLICATION SLAVE ON *.* TO '$cluster_login'@'%';"
+mysql --user=$root_login --password=$root_pass -e "FLUSH PRIVILEGES;"
+mysql --user=$root_login --password=$root_pass -e "FLUSH TABLES WITH READ LOCK;"
 
 REMOTE_FILE=`mysql --host=$REMOTE_HOST --user=$LOGIN --password=$PASS -e "show master status \G" | grep "File" | awk '{print $2}'`
 REMOTE_POS=`mysql --host=$REMOTE_HOST --user=$LOGIN --password=$PASS -e "show master status \G" | grep "Position" | awk '{print $2}'`
