@@ -1,14 +1,19 @@
-# https://habr.com/ru/articles/87394/
+# https://docs.eltex-co.ru/pages/viewpage.action?pageId=50986849
 
 vim /etc/mysql/mysql.conf.d/mysqld.cnf
 
 bind-address = 0.0.0.0
-server-id = 1
+server-id = 1 #LAMP02 2
 log_bin = /var/log/mysql/mysql-bin.log
 binlog_expire_logs_seconds = 2592000
 max_binlog_size = 100M
+auto_increment_increment= 2
+auto_increment_offset = 1 #LAMP02 2
 binlog_do_db = komments
-binlog_ignore_db = mysql
+binlog-ignore-db = mysql
+binlog-ignore-db = Syslog
+binlog-ignore-db = performance_schema
+binlog-ignore-db = information_schema
 
 sudo systemctl restart mysql
 
