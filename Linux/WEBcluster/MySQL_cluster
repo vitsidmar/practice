@@ -22,8 +22,8 @@ CHANGE MASTER TO
 MASTER_HOST='172.16.240.12',
 MASTER_USER='replicator',
 MASTER_PASSWORD='replicator_password',
-MASTER_LOG_FILE='mysql-bin.000001', -- Замість mysql-bin.000001 використайте значення з LAMP02
-MASTER_LOG_POS=position; -- Замість position використайте значення з LAMP02
+MASTER_LOG_FILE='mysql-bin.000006',
+MASTER_LOG_POS=157;
 
 START SLAVE;
 SHOW SLAVE STATUS\G;
@@ -54,6 +54,9 @@ START SLAVE;
 SHOW SLAVE STATUS\G;
 # check logs
 sudo tail -f /var/log/mysql/error.log
+
+mysql -u replicator -p -h 172.16.240.12
+
 
 DROP USER IF EXISTS 'replication'@'172.16.240.12';
 DROP USER IF EXISTS 'replication'@'172.16.240.11';
