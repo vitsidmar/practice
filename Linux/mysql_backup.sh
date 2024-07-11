@@ -1,4 +1,6 @@
 #!/bin/bash
+# An jedem geraden Tag crontab 0 3 * * * [ $(expr $(date +\%d) \% 2) -eq 0 ] && mysql_backup.sh 
+# An jedem ungeraden Tag crontab 0 3 * * * [ $(expr $(date +\%d) \% 2) -eq 1 ] && mysql_backup.sh
 # Datenbank Parameter
 DB_HOST="localhost"
 DB_USER="sqluser"
