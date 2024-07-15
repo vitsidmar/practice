@@ -20,12 +20,13 @@ mkdir /etc/nginx/stream-enabled
 
 cat > /etc/nginx/sites-available/web_servers.conf << EOL
 upstream web_servers {
-    server 172.16.240.198:80;
-    server 172.16.240.199:80;
+    least_conn;
+    server 172.16.240.11:80 max_fails=2 fail_timeout=10s;
+    server 172.16.240.12:80 max_fails=2 fail_timeout=10s;
 }
 
 server {
-    listen 172.16.0.1:80 default_server;
+    listen 172.16.240.5:80 default_server;
     listen 172.16.240.10:80 default_server;
 
     location / {
@@ -35,8 +36,19 @@ server {
 
         proxy_pass         http://web_servers;
         proxy_redirect     default;
+
+        proxy_connect_timeout 2s;
+        proxy_send_timeout 5s;
+        proxy_read_timeout 5s;
+        proxy_next_upstream error timeout http_500 http_502 http_503 http_504;
     }
 }
+
+log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                  '$status $body_bytes_sent "$http_referer" '
+                  '"$http_user_agent" "$http_x_forwarded_for"';
+access_log /var/log/nginx/access.log main;
+error_log /var/log/nginx/error.log warn;
 EOL
 
 sudo ln -s /etc/nginx/sites-available/web_servers.conf /etc/nginx/sites-enabled/
