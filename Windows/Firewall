@@ -73,6 +73,11 @@ New-NetFirewallRule -DisplayName "Allow MSRPC Inbound" -Direction Inbound -Proto
 New-NetFirewallRule -DisplayName "Allow Netlogon Inbound" -Direction Inbound -Protocol TCP -LocalPort 445 -Action Allow -Profile Domain
 New-NetFirewallRule -DisplayName "Allow Kerberos Password Change Inbound" -Direction Inbound -Protocol TCP -LocalPort 464 -Action Allow -Profile Domain
 New-NetFirewallRule -DisplayName "Allow Kerberos Password Change Inbound" -Direction Inbound -Protocol UDP -LocalPort 464 -Action Allow -Profile Domain
+# Blockieren Eingehende regeln
+New-NetFirewallRule -DisplayName "Block NetBIOS" -Direction Inbound -Protocol UDP -LocalPort 137 -Action Block -Profile Any
+New-NetFirewallRule -DisplayName "Block NetBIOS" -Direction Inbound -Protocol TCP -LocalPort 139 -Action Block -Profile Any
+New-NetFirewallRule -DisplayName "Block HTTP RPC Endpoint Mapper" -Direction Inbound -Protocol TCP -LocalPort 593 -Action Block -Profile Any
+New-NetFirewallRule -DisplayName "Block WSDAPI" -Direction Inbound -Protocol TCP -LocalPort 5357 -Action Block -Profile Any
 # Eingehende Regeln blockieren und alle ausgehenden Regeln öffnen
 Set-NetFirewallProfile -Profile Domain,Private,Public -DefaultInboundAction Block -DefaultOutboundAction Allow
 
