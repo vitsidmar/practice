@@ -3,3 +3,9 @@ https://nmap.org/dist/nmap-7.95-1.src.rpm
 https://nmap.org/dist/nmap-7.95.dmg
 https://github.com/nmap/nmap
 nmap [ <Scan Type> ...] [ <Options> ] { <target specification> }
+
+nmap -sP 172.16.240.0/24
+nmap -PN 172.16.240.21
+nmap -A 172.16.240.21
+
+https://blog.sedicomm.com/2019/03/26/32-primera-ispolzovaniya-komandy-nmap-dlya-linux-sistem/
