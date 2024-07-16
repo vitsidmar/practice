@@ -1,3 +1,58 @@
+# Dienste services.msc
+Remote Registry
+Fax
+Bluetooth Support Service
+Windows Error Reporting Service
+Internet Explorer ETW Collector Service
+
+# Protokol
+File and Printer Sharing for Microsoft Networks
+Client for Microsoft Networks
+Link-Layer Topology Discovery Mapper I/O Driver
+Link-Layer Topology Discovery Responder
+
+# Block 
+New-NetFirewallRule -DisplayName "Block FTP Inbound" -Direction Inbound -Protocol TCP -LocalPort 20,21 -Action Block -Profile Any
+New-NetFirewallRule -DisplayName "Block FTP Outbound" -Direction Outbound -Protocol TCP -LocalPort 20,21 -Action Block -Profile Any
+New-NetFirewallRule -DisplayName "Block Telnet Inbound" -Direction Inbound -Protocol TCP -LocalPort 23 -Action Block -Profile Any
+New-NetFirewallRule -DisplayName "Block Telnet Outbound" -Direction Outbound -Protocol TCP -LocalPort 23 -Action Block -Profile Any
+New-NetFirewallRule -DisplayName "Block SMB Inbound" -Direction Inbound -Protocol TCP -LocalPort 137,138,139,445 -Action Block -Profile Any
+New-NetFirewallRule -DisplayName "Block SMB Outbound" -Direction Outbound -Protocol TCP -LocalPort 137,138,139,445 -Action Block -Profile Any
+
+New-NetFirewallRule -DisplayName "Block RDP" -Direction Inbound -Protocol TCP -LocalPort 3389 -Action Block -Profile Any
+
+# Inbound
+New-NetFirewallRule -DisplayName "Allow RDP" -Direction Inbound -Protocol TCP -LocalPort 3389 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow HTTP" -Direction Inbound -Protocol TCP -LocalPort 80 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow HTTPS" -Direction Inbound -Protocol TCP -LocalPort 443 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow DNS" -Direction Inbound -Protocol UDP -LocalPort 53 -Action Allow -Profile Any
+
+# Outbound
+New-NetFirewallRule -DisplayName "Allow Outbound RDP" -Direction Outbound -Protocol TCP -LocalPort 3389 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow Outbound HTTP" -Direction Outbound -Protocol TCP -LocalPort 80 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow Outbound HTTPS" -Direction Outbound -Protocol TCP -LocalPort 443 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow Outbound DNS" -Direction Outbound -Protocol UDP -LocalPort 53 -Action Allow -Profile Any
+
+
+Get-NetFirewallRule | Where-Object { $_.DisplayName -like "Allow *" }
+Test-NetConnection -ComputerName <IP-адреса вашого сервера> -Port 3389
+Test-NetConnection -ComputerName <IP-адреса вашого сервера> -Port 80
+Test-NetConnection -ComputerName <IP-адреса вашого сервера> -Port 443
+Test-NetConnection -ComputerName <IP-адреса вашого сервера> -Port 53 -Udp
+
+# Scan FTP(20-21), Telnet(23), DNS(53), HTTP(80), HTTPS(443), SMB(137,138,139,445), RDP(3389)
+nmap -p 20,21,23,53,80,443,137,138,139,445,3389 <IP-адреса вашого сервера>
+
+
+# Внесення змін до існуючого правила
+Set-NetFirewallRule -DisplayName "Allow RDP" -Enabled False
+
+dism /online /Enable-Feature /FeatureName:TelnetClient
+telnet <IP-адреса вашого сервера> 137
+telnet <IP-адреса вашого сервера> 138
+telnet <IP-адреса вашого сервера> 139
+telnet <IP-адреса вашого сервера> 445
+
 
 
 fw.msc
