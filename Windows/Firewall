@@ -1,35 +1,5 @@
-# Dienste services.msc
-Remote Registry
-Fax
-Bluetooth Support Service
-Windows Error Reporting Service
-Internet Explorer ETW Collector Service
-
-# Protokol
-File and Printer Sharing for Microsoft Networks
-Client for Microsoft Networks
-Link-Layer Topology Discovery Mapper I/O Driver
-Link-Layer Topology Discovery Responder
-
-
 dism /online /Enable-Feature /FeatureName:TelnetClient
 telnet IP port
-
-# Block 
-New-NetFirewallRule -DisplayName "Block FTP Inbound" -Direction Inbound -Protocol TCP -LocalPort 20,21 -Action Block -Profile Any
-New-NetFirewallRule -DisplayName "Block FTP Outbound" -Direction Outbound -Protocol TCP -LocalPort 20,21 -Action Block -Profile Any
-New-NetFirewallRule -DisplayName "Block Telnet Inbound" -Direction Inbound -Protocol TCP -LocalPort 23 -Action Block -Profile Any
-New-NetFirewallRule -DisplayName "Block Telnet Outbound" -Direction Outbound -Protocol TCP -LocalPort 23 -Action Block -Profile Any
-New-NetFirewallRule -DisplayName "Block SMB Inbound" -Direction Inbound -Protocol TCP -LocalPort 137,138,139,445 -Action Block -Profile Any
-New-NetFirewallRule -DisplayName "Block SMB Outbound" -Direction Outbound -Protocol TCP -LocalPort 137,138,139,445 -Action Block -Profile Any
-
-New-NetFirewallRule -DisplayName "Block RDP" -Direction Inbound -Protocol TCP -LocalPort 3389 -Action Block -Profile Any
-
-# Inbound
-New-NetFirewallRule -DisplayName "Allow RDP" -Direction Inbound -Protocol TCP -LocalPort 3389 -Action Allow -Profile Any
-New-NetFirewallRule -DisplayName "Allow HTTP" -Direction Inbound -Protocol TCP -LocalPort 80 -Action Allow -Profile Any
-New-NetFirewallRule -DisplayName "Allow HTTPS" -Direction Inbound -Protocol TCP -LocalPort 443 -Action Allow -Profile Any
-New-NetFirewallRule -DisplayName "Allow DNS" -Direction Inbound -Protocol UDP -LocalPort 53 -Action Allow -Profile Any
 
 Get-NetFirewallRule | Where-Object { $_.DisplayName -like "Allow *" }
 Test-NetConnection -ComputerName IP -Port 3389
@@ -100,3 +70,19 @@ open in Domain
 445/tcp  open  microsoft-ds?
 464/tcp  open  kpasswd5?
 
+# Dienste services.msc
+Remote Registry
+Fax
+Bluetooth Support Service
+Windows Error Reporting Service
+Internet Explorer ETW Collector Service
+
+# Protokol
+File and Printer Sharing for Microsoft Networks
+Client for Microsoft Networks
+Link-Layer Topology Discovery Mapper I/O Driver
+Link-Layer Topology Discovery Responder
+
+https://habr.com/ru/companies/jetinfosystems/articles/690440/
+https://habr.com/ru/companies/bastion/articles/799529/
+https://defcon.ru/penetration-testing/18872/
