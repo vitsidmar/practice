@@ -11,6 +11,10 @@ Client for Microsoft Networks
 Link-Layer Topology Discovery Mapper I/O Driver
 Link-Layer Topology Discovery Responder
 
+
+dism /online /Enable-Feature /FeatureName:TelnetClient
+telnet IP port
+
 # Block 
 New-NetFirewallRule -DisplayName "Block FTP Inbound" -Direction Inbound -Protocol TCP -LocalPort 20,21 -Action Block -Profile Any
 New-NetFirewallRule -DisplayName "Block FTP Outbound" -Direction Outbound -Protocol TCP -LocalPort 20,21 -Action Block -Profile Any
@@ -27,45 +31,67 @@ New-NetFirewallRule -DisplayName "Allow HTTP" -Direction Inbound -Protocol TCP -
 New-NetFirewallRule -DisplayName "Allow HTTPS" -Direction Inbound -Protocol TCP -LocalPort 443 -Action Allow -Profile Any
 New-NetFirewallRule -DisplayName "Allow DNS" -Direction Inbound -Protocol UDP -LocalPort 53 -Action Allow -Profile Any
 
-# Outbound
-New-NetFirewallRule -DisplayName "Allow Outbound RDP" -Direction Outbound -Protocol TCP -LocalPort 3389 -Action Allow -Profile Any
-New-NetFirewallRule -DisplayName "Allow Outbound HTTP" -Direction Outbound -Protocol TCP -LocalPort 80 -Action Allow -Profile Any
-New-NetFirewallRule -DisplayName "Allow Outbound HTTPS" -Direction Outbound -Protocol TCP -LocalPort 443 -Action Allow -Profile Any
-New-NetFirewallRule -DisplayName "Allow Outbound DNS" -Direction Outbound -Protocol UDP -LocalPort 53 -Action Allow -Profile Any
-
-
 Get-NetFirewallRule | Where-Object { $_.DisplayName -like "Allow *" }
-Test-NetConnection -ComputerName <IP-адреса вашого сервера> -Port 3389
-Test-NetConnection -ComputerName <IP-адреса вашого сервера> -Port 80
-Test-NetConnection -ComputerName <IP-адреса вашого сервера> -Port 443
-Test-NetConnection -ComputerName <IP-адреса вашого сервера> -Port 53 -Udp
+Test-NetConnection -ComputerName IP -Port 3389
 
-# Scan FTP(20-21), Telnet(23), DNS(53), HTTP(80), HTTPS(443), SMB(137,138,139,445), RDP(3389)
+# Scan FTP(20-21), Telnet(23), SMTP(25), DNS(53), HTTP(80), NetBIOS(137,138,139), SNMP(161,162), HTTPS(443), SMB(445), RDP(3389)
 nmap -p 20,21,23,53,80,443,137,138,139,445,3389 <IP-адреса вашого сервера>
-
 
 # Внесення змін до існуючого правила
 Set-NetFirewallRule -DisplayName "Allow RDP" -Enabled False
 
-dism /online /Enable-Feature /FeatureName:TelnetClient
-telnet <IP-адреса вашого сервера> 137
-telnet <IP-адреса вашого сервера> 138
-telnet <IP-адреса вашого сервера> 139
-telnet <IP-адреса вашого сервера> 445
 
+# 
+Set-NetFirewallProfile -Profile Domain,Private,Public -Enabled True
+Set-NetFirewallProfile -Profile Domain,Private,Public -DefaultInboundAction Block
+Set-NetFirewallProfile -Profile Domain,Private,Public -DefaultOutboundAction Allow
+Set-NetFirewallProfile -Profile Domain,Private,Public -AllowInboundRules True
+Set-NetFirewallProfile -Profile Domain,Private,Public -AllowLocalFirewallRules True
+Set-NetFirewallProfile -Profile Domain,Private,Public -AllowLocalIPsecRules True
+Set-NetFirewallProfile -Profile Domain,Private,Public -AllowUserApps True
+Set-NetFirewallProfile -Profile Domain,Private,Public -AllowUserPorts True
+Set-NetFirewallProfile -Profile Domain,Private,Public -AllowUnicastResponseToMulticast False
+Set-NetFirewallProfile -Profile Domain,Private,Public -NotifyOnListen True
+Set-NetFirewallProfile -Profile Domain,Private,Public -EnableStealthModeForIPsec True
+Set-NetFirewallProfile -Profile Domain,Private,Public -LogAllowed True
+Set-NetFirewallProfile -Profile Domain,Private,Public -LogBlocked True
+#Set-NetFirewallProfile -Profile Domain,Private,Public -LogFileName "%systemroot%\system32\LogFiles\Firewall\pfirewall.log"
+#Set-NetFirewallProfile -Profile Domain,Private,Public -LogMaxSizeKilobytes 4096
 
+# Offene Eingehende regeln
+New-NetFirewallRule -DisplayName "Allow DNS Inbound" -Direction Inbound -Protocol TCP -LocalPort 53 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow DNS Inbound" -Direction Inbound -Protocol UDP -LocalPort 53 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow LDAP Inbound" -Direction Inbound -Protocol TCP -LocalPort 389 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow LDAP SSL Inbound" -Direction Inbound -Protocol TCP -LocalPort 636 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow Global Catalog Inbound" -Direction Inbound -Protocol TCP -LocalPort 3268 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow Global Catalog SSL Inbound" -Direction Inbound -Protocol TCP -LocalPort 3269 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow RDP Inbound" -Direction Inbound -Protocol TCP -LocalPort 3389 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow NTP Inbound" -Direction Inbound -Protocol UDP -LocalPort 123 -Action Allow -Profile Any
+New-NetFirewallRule -DisplayName "Allow Kerberos Inbound" -Direction Inbound -Protocol TCP -LocalPort 88 -Action Allow -Profile Domain
+New-NetFirewallRule -DisplayName "Allow Kerberos Inbound" -Direction Inbound -Protocol UDP -LocalPort 88 -Action Allow -Profile Domain
+New-NetFirewallRule -DisplayName "Allow MSRPC Inbound" -Direction Inbound -Protocol TCP -LocalPort 135 -Action Allow -Profile Domain
+New-NetFirewallRule -DisplayName "Allow Netlogon Inbound" -Direction Inbound -Protocol TCP -LocalPort 445 -Action Allow -Profile Domain
+New-NetFirewallRule -DisplayName "Allow Kerberos Password Change Inbound" -Direction Inbound -Protocol TCP -LocalPort 464 -Action Allow -Profile Domain
+New-NetFirewallRule -DisplayName "Allow Kerberos Password Change Inbound" -Direction Inbound -Protocol UDP -LocalPort 464 -Action Allow -Profile Domain
+# Eingehende Regeln blockieren und alle ausgehenden Regeln öffnen
+Set-NetFirewallProfile -Profile Domain,Private,Public -DefaultInboundAction Block -DefaultOutboundAction Allow
 
-fw.msc
+Block
+137/udp open  netbios-ns
+139/tcp  open  netbios-ssn         
+593/tcp  open  ncacn_http    
+5357/tcp open  http
+Open for all
+53/tcp/udp  open  DNS
+389/tcp/udp  open  ldap
+636/tcp  open  ssl/ldap
+3268/tcp open  ldap          
+3269/tcp open  ssl/ldap
+3389/tcp open  ms-wbt-server 
+123/udp open  ntp
+open in Domain
+88/tcp/udp   open  kerberos-sec
+135/tcp  open  msrpc
+445/tcp  open  microsoft-ds?
+464/tcp  open  kpasswd5?
 
-netsh advfirewall firewall add rule name="Block Port 135" dir=in action=block
-protocol=TCP localport=135
-netsh advfirewall firewall add rule name="Block Port 139" dir=in action=block
-protocol=TCP localport=139
-netsh advfirewall firewall add rule name="Block Port 445" dir=in action=block
-protocol=TCP localport=445
-netsh advfirewall firewall add rule name="Block Port 3389" dir=in action=block
-protocol=TCP localport=3389
-netsh advfirewall firewall add rule name="Block Port 5985" dir=in action=block
-protocol=TCP localport=5985
-netsh advfirewall firewall add rule name="Block Port 5986" dir=in action=block
-protocol=TCP localport=5986
