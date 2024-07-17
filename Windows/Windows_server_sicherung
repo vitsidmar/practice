@@ -21,3 +21,53 @@ $files = Get-ChildItem $path | Where-Object { $_.LastWriteTime -lt (Get-Date).Ad
 foreach ($file in $files) {
     Remove-Item $file.FullName
 }
+________________________
+# Backup nur AD Database
+$WBadmin_cmd = "wbadmin start backup -backuptarget:$path -include:C:\Windows\NTDS\ntds.dit -quiet"
+Invoke-Expression $WBadmin_cmd
+________________________
+# create Task Sheduler
+$Trigger= New-ScheduledTaskTrigger -At 01:00am -Daily
+$User= "NT AUTHORITY\SYSTEM"
+$Action= New-ScheduledTaskAction -Execute "PowerShell.exe" -Argument "C:\Users\vital\Documents\backup.ps1"
+Register-ScheduledTask -TaskName "StartupScript_PS" -Trigger $Trigger -User $User -Action $Action -RunLevel Highest –Force
+________________________
+# New backup script
+# Імпорт модуля ServerManager
+Import-Module ServerManager
+
+# Установка функцій Windows Server Backup
+Install-WindowsFeature -Name Windows-Server-Backup -IncludeAllSubFeature
+
+# Визначення змінної дати у форматі 'yyyy-MM-dd'
+[string]$date = get-date -f 'yyyy-MM-dd'
+
+# Визначення шляху до мережевої папки для збереження резервних копій
+$path = "\\srvbak1\backup\dc1\"
+$TargetUNC = $path + $date
+
+# Перевірка існування цільової папки, якщо не існує - створення
+$TestTargetUNC = Test-Path -Path $TargetUNC
+if (!($TestTargetUNC)) {
+    New-Item -Path $TargetUNC -ItemType directory
+}
+
+# Формування команди для виконання резервного копіювання
+$WBadmin_cmd = "wbadmin.exe START BACKUP -backupTarget:$TargetUNC -systemState -noverify -vssCopy -quiet"
+Invoke-Expression $WBadmin_cmd
+
+# Архівування резервної копії
+$archiveFile = "$TargetUNC\Backup_$date.zip"
+Compress-Archive -Path "$TargetUNC\*" -DestinationPath $archiveFile
+
+# Видалення неархівованих файлів після архівування
+Get-ChildItem -Path $TargetUNC | Where-Object { $_.Name -ne "Backup_$date.zip" } | Remove-Item
+
+# Змінна для зберігання кількості днів резервних копій
+$daysToKeep = 3
+
+# Видалення резервних копій старіших за $daysToKeep днів
+$files = Get-ChildItem $path | Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-$daysToKeep) }
+foreach ($file in $files) {
+    Remove-Item $file.FullName
+}
