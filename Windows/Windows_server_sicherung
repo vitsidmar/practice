@@ -71,3 +71,6 @@ $files = Get-ChildItem $path | Where-Object { $_.LastWriteTime -lt (Get-Date).Ad
 foreach ($file in $files) {
     Remove-Item $file.FullName
 }
+
+
+# https://winitpro.ru/index.php/2019/10/10/nastraivaem-backup-active-directory/
