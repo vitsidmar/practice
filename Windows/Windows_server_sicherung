@@ -2,4 +2,16 @@ Install role Windows server sicherung im Features (wbadmin)
 Powershell
 Add-Windowsfeature Windows-Server-Backup –Includeallsubfeature
 Get-WindowsFeature Windows-Server-Backup
+Windows manager -> Windows server sicherung
 
+Powershel
+Import-Module ServerManager
+[string]$date = get-date -f 'yyyy-MM-dd'
+$path=”\\srvbak1\backup\dc1\”
+$TargetUNC=$path+$date
+$TestTargetUNC= Test-Path -Path $TargetUNC
+if (!($TestTargetUNC)){
+New-Item -Path $TargetUNC -ItemType directory
+}
+$WBadmin_cmd = "wbadmin.exe START BACKUP -backupTarget:$TargetUNC -systemState -noverify -vssCopy -quiet"
+Invoke-Expression $WBadmin_cmd
