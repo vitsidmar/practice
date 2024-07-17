@@ -1,0 +1,5 @@
+Install role Windows server sicherung im Features (wbadmin)
+Powershell
+Add-Windowsfeature Windows-Server-Backup –Includeallsubfeature
+Get-WindowsFeature Windows-Server-Backup
+
