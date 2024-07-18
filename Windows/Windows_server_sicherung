@@ -4,6 +4,8 @@ Install-WindowsFeature -Name Windows-Server-Backup -IncludeAllSubFeature
 Get-WindowsFeature Windows-Server-Backup
 Windows manager -> Windows server sicherung
 
+\\w22s-rd\backup
+
 # Powershel
 # powershell -ExecutionPolicy Bypass -File C:\Users\vital\Documents\backup.ps1
 
