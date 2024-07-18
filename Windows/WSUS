@@ -1,30 +1,60 @@
 
 
+Servern
+When an update is in Definitionupdates, Updates, Upgrades
+Approve the update for Servern
+Set a deadline for 30 days after the approval at 03:30
+Benutzer 
+When an update is in Definitionupdates, Updates, Upgrades
+Approve the update for Benutzer
+Set a deadline for 14 days after the approval at 03:30
+Testen
+When an update is in Definitionupdates, Sicherheitsupdates, Updates, Upgrades, Wichtige Updates
+Approve the update for Testen
+Set a deadline for the same day as the approval at 02:00
+Wichtige Updates
+When an update is in Definitionupdates, Sicherheitsupdates, Updates, Upgrades, Wichtige Updates
+Approve the update for Nicht zugewiesene Computer, Benutzer, Servern
+Set a deadline for 7 days after the approval at 03:00
+
 GPO Servern
 Computerkonfiguration -> Richtlinien -> Administrative Vorlagen -> Windows Komponenten -> Windows Update
-1. Automatische Updates konfigurieren -> Aktiviert
-  3 = Updates automatisch herunterladen und über installierbare Updates benachrichtigen
-  Jede Woche
-2. Internen Pfad fur den Microsoft Updatedienst angeben -> Aktiviert
+1. Internen Pfad fur den Microsoft Updatedienst angeben -> Aktiviert
   Interner Updatedienst zum Ermitteln von Updates: http://VS-WSUS.migrate.local:8530
   Intraserver fur statistik: http://VS-WSUS.migrate.local:8530
-3. Keinen automatischen Neustart fur geplante Installationen Automatisher Updates durchfuhren,  wenn Benutzer angemeldet ist. -> Aktiviert
-4. Clientseitige Zielzuordnung aktivieren -> Aktiviert
+2. Clientseitige Zielzuordnung aktivieren -> Aktiviert
   Zielgruppenname fur diesen Computer: Servern
+3. Automatische Updates konfigurieren -> Aktiviert
+  3 = Updates automatisch herunterladen und über installierbare Updates benachrichtigen
+  Jede Woche
+4. Keinen automatischen Neustart fur geplante Installationen Automatisher Updates durchfuhren, wenn Benutzer angemeldet ist. -> Aktiviert
 
 GPO Benutzer
 Computerkonfiguration -> Richtlinien -> Administrative Vorlagen -> Windows Komponenten -> Windows Update
-1. Automatische Updates sofort installieren -> Deaktiviert
-2. Automatische Updates konfigurieren -> Aktiviert
-  4 = Updates automatisch herunterladen und laut angegebenem Zeitplan installieren
-  Wahrend automatischer Wartung installieren -> Taglich am 03:00
-  Jede Woche
-3. Internen Pfad fur den Microsoft Updatedienst angeben -> Aktiviert
+1. Internen Pfad fur den Microsoft Updatedienst angeben -> Aktiviert
   Interner Updatedienst zum Ermitteln von Updates: http://VS-WSUS.migrate.local:8530
   Intraserver fur statistik: http://VS-WSUS.migrate.local:8530
-4. Keinen automatischen Neustart fur geplante Installationen Automatisher Updates durchfuhren,  wenn Benutzer angemeldet ist. -> Deaktiviert
-5. Clientseitige Zielzuordnung aktivieren -> Aktiviert
+2. Clientseitige Zielzuordnung aktivieren -> Aktiviert
+  Zielgruppenname fur diesen Computer: Servern
+3. Automatische Updates konfigurieren -> Aktiviert
+  3 = Updates automatisch herunterladen und über installierbare Updates benachrichtigen
+  Jede Woche
+4. Keinen automatischen Neustart fur geplante Installationen Automatisher Updates durchfuhren, wenn Benutzer angemeldet ist. -> Aktiviert
+
+Testen
+Computerkonfiguration -> Richtlinien -> Administrative Vorlagen -> Windows Komponenten -> Windows Update
+1. Internen Pfad fur den Microsoft Updatedienst angeben -> Aktiviert
+  Interner Updatedienst zum Ermitteln von Updates: http://VS-WSUS.migrate.local:8530
+  Intraserver fur statistik: http://VS-WSUS.migrate.local:8530
+2. Clientseitige Zielzuordnung aktivieren -> Aktiviert
   Zielgruppenname fur diesen Computer: Benutzer
+3. Automatische Updates konfigurieren -> Aktiviert
+  4 = Updates automatisch herunterladen und laut angegebenem Zeitplan installieren
+  Wahrend automatischer Wartung installieren -> Taglich am 04:00
+  Jede Woche
+4. Automatische Updates sofort installieren -> Deaktiviert
+5. Keinen automatischen Neustart fur geplante Installationen Automatisher Updates durchfuhren,  wenn Benutzer angemeldet ist. -> Deaktiviert
+
 
 
 # https://winitpro.ru/index.php/2014/01/22/nastrojka-gruppovyx-politik-wsus/
