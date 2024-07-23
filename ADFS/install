@@ -4,6 +4,9 @@ Add-KdsRootKey –EffectiveTime (Get-Date).AddHours(-10)
 New-SelfSignedCertificate -DnsName adfs.migrate.local -CertStoreLocation cert:\LocalMachine\My
 # open certlm.msc and export certificat *.pfx
 # Create in AD user adfsuser Mitglied von Domainen-Admins, am server with adfs rolle add this user to Administratoren and Leistungsprotokollbenutzer grupen, im Dienste -> Eigenschaften -> Anmelden add diese kono
+Відкрийте Local Security Policy (Lokale Sicherheitsrichtlinie) через Start -> Administrative Tools (Verwaltung) -> Local Security Policy (Lokale Sicherheitsrichtlinie).
+Перейдіть до Local Policies (Lokale Richtlinien) -> User Rights Assignment (Zuweisen von Benutzerrechten).
+Знайдіть політику Log on as a service (Als Dienst anmelden) і додайте вашого користувача.
 # Configure ADFS
 
 # check adfs
