@@ -2,6 +2,7 @@ install role ADFS
 # Create certificat
 New-SelfSignedCertificate -DnsName adfs.migrate.local -CertStoreLocation cert:\LocalMachine\My
 # open certlm.msc and export certificat *.pfx
+# Create in AD user adfsuser Mitglied von Domainen-Admins, am server with adfs rolle add this user to Administratoren and Leistungsprotokollbenutzer grupen, im Dienste -> Eigenschaften -> Anmelden add diese kono
 # Configure ADFS
 
 # check adfs
