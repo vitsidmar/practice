@@ -24,9 +24,6 @@ sloUrl=$(xmlstarlet sel -N md=$namespace -t -v "//md:IDPSSODescriptor/md:SingleL
 x509cert=$(xmlstarlet sel -N md=$namespace -N ds=$ds -t -v "//md:KeyDescriptor[@use='signing']/ds:KeyInfo/ds:X509Data/ds:X509Certificate" "$METADATA_FILE" | head -n 1)
 
 mkdir -p "$OUTPUT_DIR/saml/certs"
-openssl req -new -x509 -days 3652 -nodes -out saml/certs/sp.crt -keyout saml/certs/sp.key
-
-
 openssl genpkey -algorithm RSA -out "$OUTPUT_DIR/saml/certs/private.key" -pkeyopt rsa_keygen_bits:2048
 openssl req -new -key "$OUTPUT_DIR/saml/certs/private.key" -out "$OUTPUT_DIR/saml/certs/cert.csr" -subj $CERT_INFO
 openssl x509 -req -days 365 -in "$OUTPUT_DIR/saml/certs/cert.csr" -signkey "$OUTPUT_DIR/saml/certs/private.key" -out "$OUTPUT_DIR/saml/certs/public.crt"
