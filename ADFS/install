@@ -1,4 +1,28 @@
 install role ADFS
+
+# mache neue certificat auf dem ADFS server
+Install-Module -Name PKI -Scope AllUsers
+$cert = New-SelfSignedCertificate -DnsName "adfs.migrate.local", "certauth.adfs.migrate.local", "enterpriseregistration.migrate.local" -CertStoreLocation "cert:\LocalMachine\My" -KeyUsage DigitalSignature, KeyEncipherment -FriendlyName "ADFS Certificate"
+# Экспорт сертификата в формате PFX для импорта в ADFS
+New-Item -Path "C:\Certificates" -ItemType Directory
+$password = ConvertTo-SecureString -String "P@ssw0rd" -Force -AsPlainText
+Export-PfxCertificate -Cert $cert -FilePath "C:\Certificates\ADFS.pfx" -Password $password
+# Экспорт сертификата в формате CER для импорта в доверенные корневые центры сертификации
+Export-Certificate -Cert $cert -FilePath "C:\Certificates\ADFS.cer"
+Import-Certificate -FilePath "C:\Certificates\ADFS.cer" -CertStoreLocation "cert:\LocalMachine\Root"
+# copy diese certificat auf dem linux web app
+sudo apt update
+sudo apt install apache2 openssl
+sudo mkdir /etc/ssl/adfs
+sudo cp /path/to/ADFS.cer /etc/ssl/adfs/
+sudo cp /path/to/ADFS.pfx /etc/ssl/adfs/
+sudo openssl pkcs12 -in /etc/ssl/adfs/ADFS.pfx -out /etc/ssl/adfs/adfs.pem -nodes
+sudo openssl pkcs12 -in /etc/ssl/adfs/ADFS.pfx -out /etc/ssl/adfs/adfs.crt -nokeys -clcerts
+sudo openssl pkcs12 -in /etc/ssl/adfs/ADFS.pfx -out /etc/ssl/adfs/adfs.key -nocerts -nodes
+
+
+
+
 # Create certificat
 Add-KdsRootKey –EffectiveTime (Get-Date).AddHours(-10)
 New-SelfSignedCertificate -DnsName adfs.migrate.local -CertStoreLocation cert:\LocalMachine\My
