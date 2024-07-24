@@ -2,14 +2,25 @@ install role ADFS
 
 # mache neue certificat auf dem ADFS server
 Install-Module -Name PSPKI -Scope AllUsers
-$cert = New-SelfSignedCertificate -DnsName "adfs.migrate.local", "certauth.adfs.migrate.local", "enterpriseregistration.migrate.local" -CertStoreLocation "cert:\LocalMachine\My" -KeyUsage DigitalSignature, KeyEncipherment -FriendlyName "ADFS Certificate"
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+Start-Service KdsSvc
+
+
+$cert = New-SelfSignedCertificate -DnsName "adfs.migrate.local", "certauth.adfs.migrate.local", "*.migrate.local", "enterpriseregistration.migrate.local" -CertStoreLocation "cert:\LocalMachine\My" -KeyUsage DigitalSignature, KeyEncipherment -KeyLength 2048 -FriendlyName "ADFS Certificate" -NotAfter (Get-Date).AddYears(5)
+$password = ConvertTo-SecureString -String "Password1" -Force -AsPlainText
+Export-PfxCertificate -Cert "cert:\LocalMachine\My\$($cert.Thumbprint)" -FilePath "C:\Certificates\adfs.pfx" -Password $password
+
+
+
+$cert = New-SelfSignedCertificate -DnsName "vs-adfs.migrate.local", "certauth.vs-adfs.migrate.local", "*.migrate.local", "enterpriseregistration.migrate.local", "enterpriseregistration.lamp01.migrate.local" -CertStoreLocation "cert:\LocalMachine\My" -KeyUsage DigitalSignature, KeyEncipherment -FriendlyName "ADFS Certificate" -NotAfter (Get-Date).AddYears(5) 
 # Экспорт сертификата в формате PFX для импорта в ADFS
 New-Item -Path "C:\Certificates" -ItemType Directory
-$password = ConvertTo-SecureString -String "P@ssw0rd" -Force -AsPlainText
+$password = ConvertTo-SecureString -String "Password1" -Force -AsPlainText
 Export-PfxCertificate -Cert $cert -FilePath "C:\Certificates\ADFS.pfx" -Password $password
 # Экспорт сертификата в формате CER для импорта в доверенные корневые центры сертификации
 Export-Certificate -Cert $cert -FilePath "C:\Certificates\ADFS.cer"
 Import-Certificate -FilePath "C:\Certificates\ADFS.cer" -CertStoreLocation "cert:\LocalMachine\Root"
+
 # copy diese certificat auf dem linux web app
 sudo apt update
 sudo apt install apache2 openssl
