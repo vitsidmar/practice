@@ -1,7 +1,7 @@
 install role ADFS
 
 # mache neue certificat auf dem ADFS server
-Install-Module -Name PKI -Scope AllUsers
+Install-Module -Name PSPKI -Scope AllUsers
 $cert = New-SelfSignedCertificate -DnsName "adfs.migrate.local", "certauth.adfs.migrate.local", "enterpriseregistration.migrate.local" -CertStoreLocation "cert:\LocalMachine\My" -KeyUsage DigitalSignature, KeyEncipherment -FriendlyName "ADFS Certificate"
 # Экспорт сертификата в формате PFX для импорта в ADFS
 New-Item -Path "C:\Certificates" -ItemType Directory
