@@ -15,9 +15,6 @@ Netzwerkkonfiguration und Sicherheit
   o Testen der Firewall-Regeln und Sicherstellung, dass sie korrekt funktionieren:
     ▪ Durchführung von Penetrationstests und Portscans.
     ▪ Dokumentation der Ergebnisse und Anpassung der Regeln bei Bedarf.
-CIS DISA Tenable
-https://nmap.org/
-https://www.metasploit.com/
 
 System- und Sicherheitsmanagement
 3. Automatisierte Backups:
@@ -33,20 +30,6 @@ System- und Sicherheitsmanagement
     ▪ Installieren der neuesten Patches und Updates.
     ▪ Überprüfen der Systemintegrität nach den Updates.
     ▪ Dokumentation aller durchgeführten Updates und etwaiger Probleme.
-Управління системою та безпекою
-3. автоматизоване резервне копіювання:
-   Налаштування запланованого завдання на віртуальній машині Windows для щоденного резервного копіювання важливих системних файлів:
-    3.1 Використання резервного копіювання Windows або стороннього інструменту.
-    Налаштування запланованого завдання на щоденне виконання.
-    3.2 Переконайтеся, що резервні копії зберігаються на мережевому накопичувачі.
-4. управління виправленнями:
-  o Розробити та задокументувати план управління та впровадження оновлень операційної системи та програмного забезпечення на ВМ Windows:
-    ▪ Створіть детальний план для регулярних циклів оновлення.
-    Визначення етапів тестування перед впровадженням у виробниче середовище.
-  o Проведення оновлень та створення звіту про вжиті заходи:
-    ▪ Встановлення останніх патчів та оновлень.
-    ▪ Перевірка цілісності системи після оновлень.
-    ▪ Документування всіх проведених оновлень та будь-яких проблем.
 
 Monitoring und Logging
 5. Log Management:
@@ -69,7 +52,6 @@ Skripting und Automatisierung
     ▪ Schreiben eines Skripts zur Abfrage spezifischer Ereignisprotokolle.
     ▪ Konfiguration des Skripts zur Erstellung und Versendung von Berichten.
     ▪ Planen des Skripts zur regelmäßigen Ausführung mittels Task Scheduler.
-Windows error reporting
 
 Fortgeschrittene Aufgaben
 7. Hochverfügbarkeit und Lastverteilung:
