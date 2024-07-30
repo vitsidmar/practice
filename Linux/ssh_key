@@ -8,5 +8,7 @@ PasswordAuthentication yes
 #PasswordAuthentication no
 
 /etc/init.d/ssh restart
+systemctl restart sshd
+
 
 chmod 400 ~/.ssh/id_rsa
