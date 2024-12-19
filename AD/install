@@ -3,6 +3,7 @@ configure Static IP
 Change computer name
 reboot
 install rolles Active Directory Domainendienste, DNS, DHCP
+create user with role Administrator
 create new Domaine
 reboot
 configure DNS 
